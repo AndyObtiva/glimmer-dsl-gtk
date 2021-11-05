@@ -10,6 +10,7 @@
 - Automatically set `window` `default_size` to `190, 150` by default
 - Automatically set `message_dialog` `default_width` to `190` by default
 - Automatically set `application` first arg to `'org.glimmer-dsl-gtk.application'` and second arg to `:flags_none` when not supplied
+- Automatically set `box` orientation to `:vertical` if not specified
 - Hello, World! sample
 - Hello, Application! sample
 - Hello, Button! sample
