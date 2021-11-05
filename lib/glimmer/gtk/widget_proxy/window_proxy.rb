@@ -48,13 +48,18 @@ module Glimmer
           end
         end
         
+        def signal_connect(signal, &block)
+          @destroy_signal_connected = true if signal.to_s.downcase == 'destroy'
+          super
+        end
+        
         private
         
         def build_widget
           @gtk = ::Gtk::Window.new(*(@args.empty? ? [:toplevel] : @args)).tap do |new_window|
             new_window.signal_connect(:destroy) do
               # TODO in the future, make this yield to external signal connections that do not want to quit app on hitting the window close button
-              ::Gtk.main_quit
+              ::Gtk.main_quit unless @destroy_signal_connected
             end
           end
         end

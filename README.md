@@ -72,6 +72,36 @@ window {
 }.show
 ```
 
+#### Hello, Application!
+
+[samples/hello/hello_application.rb](/samples/hello/hello_application.rb)
+
+Mac Screenshot:
+
+![hello application screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-application.png)
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_application.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+application('org.glimmer.hello-application', :flags_none) {
+  on(:activate) do |app|
+    window {
+      title 'Hello, Application!'
+    }.present
+  end
+}.run
+```
+
 ## Contributing
 
 -   Check out the latest master to make sure the feature hasn't been

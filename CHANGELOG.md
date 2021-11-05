@@ -3,7 +3,9 @@
 ## 0.0.1
 
 - Initial version of Glimmer DSL for GTK
-- General widget support with keyword arguments
-- General widget property support
+- General widget support with keyword arguments (e.g. `window(:toplevel).show`)
+- General widget property support (e.g. `title 'Hello, Application!'`)
+- General signal connect support via nested `on` keyword (e.g. `on(:activate) { ... }`)
 - Have `window` automatically call `::Gtk::main_quit` upon hitting `window` close (destroy) button
 - Hello, World! sample
+- Hello, Application! sample

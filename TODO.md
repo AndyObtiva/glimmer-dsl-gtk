@@ -9,7 +9,7 @@ Consider supporting `app` keyword like:
 
 ```ruby
 application('org.glimmer.hello-world', :flags_none) {
-  on_activate do |app|
+  on(:activate) do |app|
     window(app) {
       title 'Hello, World!'
     }.present
