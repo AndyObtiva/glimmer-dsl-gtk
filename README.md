@@ -107,6 +107,7 @@ class SomeGlimmerApplication
 end
 
 SomeGlimmerApplication.new.launch
+```
 
 ### Glimmer GUI DSL
 
@@ -243,6 +244,63 @@ window { |w|
         end
       }.show
     end
+  }
+}.show
+```
+
+#### Hello, Entry!
+
+[samples/hello/hello_entry.rb](/samples/hello/hello_entry.rb)
+
+Mac Screenshot:
+
+![hello entry screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-entry.png)
+
+![hello entry submitted screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-entry-submitted.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_entry'"
+```
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_entry.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window { |w|
+  title 'Hello, Entry!'
+  default_size 300, 50
+    
+  box(:vertical) {
+    e = entry {
+      on(:changed) do
+        puts e.text
+        $stdout.flush # For Windows
+      end
+    }
+    
+    button('Button') {
+      on(:clicked) do
+        message_dialog(w) { |md|
+          title 'You entered'
+          text e.text
+          
+          on(:response) do
+            md.destroy
+          end
+        }.show
+      end
+    }
   }
 }.show
 ```

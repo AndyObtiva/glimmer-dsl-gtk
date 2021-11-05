@@ -130,7 +130,7 @@ module Glimmer
       end
       
       def method_missing(method_name, *args, &block)
-        if @gtk.respond_to?("set_#{method_name}", true)
+        if @gtk.respond_to?("set_#{method_name}", true) && !args.empty?
           send_to_gtk("set_#{method_name}", *args, &block)
         elsif @gtk.respond_to?(method_name, true)
           send_to_gtk(method_name, *args, &block)

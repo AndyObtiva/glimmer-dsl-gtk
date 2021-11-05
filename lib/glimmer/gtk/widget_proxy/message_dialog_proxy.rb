@@ -24,49 +24,16 @@ require 'glimmer/gtk/widget_proxy'
 module Glimmer
   module Gtk
     class WidgetProxy
-      # Proxy for Gtk window objects
+      # Proxy for Gtk message dialog objects
       #
       # Follows the Proxy Design Pattern
-      class WindowProxy < WidgetProxy
+      class MessageDialogProxy < WidgetProxy
         DEFAULT_WIDTH = 190
-        DEFAULT_HEIGHT = 150
         
         def post_add_content
           unless @initial_content_added
             @initial_content_added = true
-            self.set_default_size(DEFAULT_WIDTH, DEFAULT_HEIGHT) if default_size.include?(-1)
-          end
-        end
-        
-        def show
-          super
-          unless @shown_at_least_once
-            @shown_at_least_once = true
-            ::Gtk.main
-          end
-        end
-        
-        def present
-          super
-          unless @shown_at_least_once
-            @shown_at_least_once = true
-            ::Gtk.main
-          end
-        end
-        
-        def signal_connect(signal, &block)
-          @destroy_signal_connected = true if signal.to_s.downcase == 'destroy'
-          super
-        end
-        
-        private
-        
-        def build_widget
-          @gtk = ::Gtk::Window.new(*(@args.empty? ? [:toplevel] : normalize_args(@args))).tap do |new_window|
-            new_window.signal_connect(:destroy) do
-              # TODO in the future, make this yield to external signal connections that do not want to quit app on hitting the window close button
-              ::Gtk.main_quit unless @destroy_signal_connected
-            end
+            self.set_default_width(DEFAULT_WIDTH) if default_width == -1
           end
         end
       end
