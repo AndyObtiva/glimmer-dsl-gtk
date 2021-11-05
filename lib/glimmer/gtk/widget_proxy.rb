@@ -150,7 +150,13 @@ module Glimmer
       private
       
       def build_widget
-        @gtk = ::Gtk.const_get(WidgetProxy.gtk_constant_symbol(@keyword)).new(*@args)
+        @gtk = ::Gtk.const_get(WidgetProxy.gtk_constant_symbol(@keyword)).new(*normalize_args(@args))
+      end
+      
+      def normalize_args(args)
+        args.map do |arg|
+          arg.is_a?(WidgetProxy) ? arg.gtk : arg
+        end
       end
     end
   end

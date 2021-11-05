@@ -200,6 +200,53 @@ application('org.glimmer.hello-application', :flags_none) {
 }.run
 ```
 
+#### Hello, Button!
+
+[samples/hello/hello_button.rb](/samples/hello/hello_button.rb)
+
+Mac Screenshot:
+
+![hello button screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-button.png)
+
+![hello button clicked screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-button-clicked.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_button'"
+```
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_button.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window { |w|
+  title 'Hello, Button!'
+  
+  button('Button') {
+    on(:clicked) do
+      message_dialog(w) { |md|
+        title 'Information'
+        text 'You clicked the button'
+        
+        on(:response) do
+          md.destroy
+        end
+      }.show
+    end
+  }
+}.show
+```
+
 ## Contributing
 
 -   Check out the latest master to make sure the feature hasn't been
