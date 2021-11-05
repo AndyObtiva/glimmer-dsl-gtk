@@ -28,9 +28,15 @@ module Glimmer
       #
       # Follows the Proxy Design Pattern
       class WindowProxy < WidgetProxy
-        DEFAULT_TITLE = ''
         DEFAULT_WIDTH = 190
         DEFAULT_HEIGHT = 150
+        
+        def post_add_content
+          unless @initial_content_added
+            @initial_content_added = true
+            self.set_default_size(DEFAULT_WIDTH, DEFAULT_HEIGHT)
+          end
+        end
         
         def show
           super
