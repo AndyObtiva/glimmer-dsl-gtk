@@ -106,9 +106,10 @@ module Glimmer
         @parent_proxy&.post_initialize_child(self)
       end
       
-      # Subclasses may override to perform post initialization work on an added child
+      # Subclasses may override to perform post initialization work on an added child (normally must also call super)
       def post_initialize_child(child)
-        # No Op by default
+        @gtk.add(child.gtk)
+        child.gtk.show
       end
       
       def window_proxy
@@ -142,22 +143,6 @@ module Glimmer
         @gtk.send(method_name, *args, &block)
       end
       
-#       def destroy
-#         if parent_proxy.nil?
-#           default_destroy
-#         else
-#           parent_proxy.destroy_child(self)
-#         end
-#       end
-#
-#       def destroy_child(child)
-#         child.default_destroy
-#       end
-#
-#       def default_destroy
-#         send_to_gtk('destroy')
-#       end
-            
       def content(&block)
         Glimmer::DSL::Engine.add_content(self, Glimmer::DSL::Libui::WidgetExpression.new, @keyword, &block)
       end
@@ -165,7 +150,7 @@ module Glimmer
       private
       
       def build_widget
-        @gtk = ::Gtk.const_get(WidgetProxy.gtk_constant_symbol(@keyword)).new
+        @gtk = ::Gtk.const_get(WidgetProxy.gtk_constant_symbol(@keyword)).new(*@args)
       end
     end
   end

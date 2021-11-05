@@ -32,29 +32,6 @@ module Glimmer
         DEFAULT_WIDTH = 190
         DEFAULT_HEIGHT = 150
         
-        def post_initialize_child(child)
-        end
-        
-#         def destroy_child(child)
-#           super
-#         end
-#
-#         def destroy
-#           super
-#           @on_destroy_procs&.each { |on_destroy_proc| on_destroy_proc.call(self)}
-#         end
-#
-#         def on_destroy(&block)
-          ## TODO look into a way to generalize this logic for multiple listeners
-#           @on_destroy_procs ||= []
-#           if block.nil?
-#             @on_destroy_procs
-#           else
-#             @on_destroy_procs << block
-#             block
-#           end
-#         end
-      
         def show
           super
           unless @shown_at_least_once
@@ -74,9 +51,9 @@ module Glimmer
         private
         
         def build_widget
-          @gtk = ::Gtk::Window.new(:toplevel).tap do |new_window|
+          @gtk = ::Gtk::Window.new(*(@args.empty? ? [:toplevel] : @args)).tap do |new_window|
             new_window.signal_connect(:destroy) do
-              # TODO in the future, make this yield to external listener registrations that do not want to quit app on hitting the window close button
+              # TODO in the future, make this yield to external signal connections that do not want to quit app on hitting the window close button
               ::Gtk.main_quit
             end
           end
