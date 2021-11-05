@@ -28,6 +28,10 @@ window {
 }.show
 ```
 
+Mac Screenshot:
+
+![hello world screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-world.png)
+
 NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
 
 Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interested in:
@@ -45,6 +49,10 @@ Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interes
 #### Hello, World!
 
 [samples/hello/hello_world.rb](/samples/hello/hello_world.rb)
+
+Mac Screenshot:
+
+![hello world screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-world.png)
 
 Run (via locally cloned project):
 
