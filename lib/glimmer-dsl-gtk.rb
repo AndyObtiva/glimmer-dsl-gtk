@@ -29,6 +29,7 @@ require 'glimmer'
 require 'os'
 require 'array_include_methods'
 require 'facets/string/underscore'
+require 'facets/string/camelcase'
 require 'facets/hash/stringify_keys'
 require 'gtk3'
 

@@ -36,6 +36,7 @@ module Glimmer
       Engine.add_dynamic_expressions(
         Gtk,
         %w[
+          property
           widget
         ]
       )

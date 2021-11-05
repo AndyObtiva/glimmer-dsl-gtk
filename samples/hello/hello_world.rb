@@ -2,4 +2,6 @@ require 'glimmer-dsl-gtk'
 
 include Glimmer
 
-window.show
+window {
+  title 'Hello, World!'
+}.show

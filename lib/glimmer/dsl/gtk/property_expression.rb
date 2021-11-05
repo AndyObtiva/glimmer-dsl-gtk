@@ -19,19 +19,21 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+require 'glimmer/dsl/expression'
+require 'glimmer/gtk/widget_proxy'
+
 module Glimmer
-  # Proxy for the original ::Gtk module (with the future option of enhancing its abilities)
-  module Gtk
-    class << self
-      def respond_to?(method_name, *args)
-        super || ::LibUI.respond_to?(method_name, *args)
-      end
-      
-      def method_missing(method_name, *args, &block)
-        if ::LibUI.respond_to?(method_name, true)
-          ::LibUI.send(method_name, *args, &block)
-        else
-          super
+  module DSL
+    module Gtk
+      class PropertyExpression < Expression
+        def can_interpret?(parent, keyword, *args, &block)
+          parent.is_a?(Glimmer::Gtk::WidgetProxy) and
+            block.nil? and
+            parent.respond_to?(keyword, *args)
+        end
+  
+        def interpret(parent, keyword, *args, &block)
+          parent.send(keyword, *args)
         end
       end
     end

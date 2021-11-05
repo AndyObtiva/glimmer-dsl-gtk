@@ -121,21 +121,17 @@ module Glimmer
 
       def respond_to?(method_name, *args, &block)
         respond_to_gtk?(method_name, *args, &block) ||
-          (
-            append_properties.include?(method_name.to_s) ||
-            (append_properties.include?(method_name.to_s.sub(/\?$/, '')) && BOOLEAN_PROPERTIES.include?(method_name.to_s.sub(/\?$/, ''))) ||
-            append_properties.include?(method_name.to_s.sub(/=$/, ''))
-          ) ||
-          can_handle_listener?(method_name.to_s) ||
           super(method_name, true)
       end
       
       def respond_to_gtk?(method_name, *args, &block)
-        @gtk.respond_to?(method_name, true)
+        @gtk.respond_to?(method_name, true) || @gtk.respond_to?("set_#{method_name}", true)
       end
       
       def method_missing(method_name, *args, &block)
-        if respond_to_gtk?(method_name, *args, &block)
+        if @gtk.respond_to?("set_#{method_name}", true)
+          send_to_gtk("set_#{method_name}", *args, &block)
+        elsif @gtk.respond_to?(method_name, true)
           send_to_gtk(method_name, *args, &block)
         else
           super
@@ -146,25 +142,21 @@ module Glimmer
         @gtk.send(method_name, *args, &block)
       end
       
-      def gtk_api_keyword
-        @keyword
-      end
-      
-      def destroy
-        if parent_proxy.nil?
-          default_destroy
-        else
-          parent_proxy.destroy_child(self)
-        end
-      end
-      
-      def destroy_child(child)
-        child.default_destroy
-      end
-      
-      def default_destroy
+#       def destroy
+#         if parent_proxy.nil?
+#           default_destroy
+#         else
+#           parent_proxy.destroy_child(self)
+#         end
+#       end
+#
+#       def destroy_child(child)
+#         child.default_destroy
+#       end
+#
+#       def default_destroy
 #         send_to_gtk('destroy')
-      end
+#       end
             
       def content(&block)
         Glimmer::DSL::Engine.add_content(self, Glimmer::DSL::Libui::WidgetExpression.new, @keyword, &block)
@@ -173,7 +165,7 @@ module Glimmer
       private
       
       def build_widget
-#         @gtk =
+        @gtk = ::Gtk.const_get(WidgetProxy.gtk_constant_symbol(@keyword)).new
       end
     end
   end

@@ -66,7 +66,12 @@ module Glimmer
         private
         
         def build_widget
-          @gtk = ::Gtk::Window.new(:toplevel)
+          @gtk = ::Gtk::Window.new(:toplevel).tap do |new_window|
+            new_window.signal_connect(:destroy) do
+              # TODO in the future, make this yield to external listener registrations that do not want to quit app on hitting the window close button
+              ::Gtk.main_quit
+            end
+          end
         end
       end
     end

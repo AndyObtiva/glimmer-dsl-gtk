@@ -23,8 +23,12 @@ require 'glimmer-dsl-gtk'
 
 include Glimmer
 
-window.show
+window {
+  title 'Hello, World!'
+}.show
 ```
+
+NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
 
 Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interested in:
 - [glimmer-dsl-swt](https://github.com/AndyObtiva/glimmer-dsl-swt): Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)
@@ -33,6 +37,32 @@ Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interes
 - [glimmer-dsl-libui](https://github.com/AndyObtiva/glimmer-dsl-libui): Glimmer DSL for Tk (Prerequisite-Free Ruby Desktop Development GUI Library)
 - [glimmer-dsl-xml](https://github.com/AndyObtiva/glimmer-dsl-xml): Glimmer DSL for XML (& HTML)
 - [glimmer-dsl-css](https://github.com/AndyObtiva/glimmer-dsl-css): Glimmer DSL for CSS
+
+## Samples
+
+### Hello Samples
+
+#### Hello, World!
+
+[samples/hello/hello_world.rb](/samples/hello/hello_world.rb)
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_world.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Hello, World!'
+}.show
+```
 
 ## Contributing
 
