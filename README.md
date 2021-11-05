@@ -16,6 +16,16 @@
 - Scaffolding for new custom widgets, apps, and gems
 - Native-Executable packaging on Mac, Windows, and Linux.
 
+Hello, World!
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window.show
+```
+
 Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interested in:
 - [glimmer-dsl-swt](https://github.com/AndyObtiva/glimmer-dsl-swt): Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)
 - [glimmer-dsl-opal](https://github.com/AndyObtiva/glimmer-dsl-opal): Glimmer DSL for Opal (Pure Ruby Web GUI and Auto-Webifier of Desktop Apps)

@@ -9,5 +9,6 @@ group :development do
   gem "rdoc", "~> 3.12"
   gem "juwelier", "~> 2.1.0"
   gem "simplecov", ">= 0"
+  gem 'puts_debuggerer', '> 0'
   gem 'rake-tui', '> 0'
 end

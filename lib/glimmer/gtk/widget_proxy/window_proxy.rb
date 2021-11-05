@@ -45,7 +45,7 @@ module Glimmer
 #         end
 #
 #         def on_destroy(&block)
-          TODO look into a way to generalize this logic for multiple listeners
+          ## TODO look into a way to generalize this logic for multiple listeners
 #           @on_destroy_procs ||= []
 #           if block.nil?
 #             @on_destroy_procs
@@ -56,18 +56,17 @@ module Glimmer
 #         end
       
         def show
-#           super
-#           unless @shown_at_least_once
-#             @shown_at_least_once = true
-#             ::Gtk.main
-#             ::Gtk.quit
-#           end
+          super
+          unless @shown_at_least_once
+            @shown_at_least_once = true
+            ::Gtk.main
+          end
         end
         
         private
         
         def build_widget
-#           @gtk =
+          @gtk = ::Gtk::Window.new(:toplevel)
         end
       end
     end

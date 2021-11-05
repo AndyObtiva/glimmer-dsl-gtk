@@ -27,6 +27,8 @@ module Glimmer
     class WidgetProxy
       class << self
         def exists?(keyword)
+          ::Gtk.const_get(gtk_constant_symbol(keyword)) ||
+            widget_proxy_class(keyword)
         end
         
         def create(keyword, parent, args, &block)
@@ -42,6 +44,10 @@ module Glimmer
         
         def constant_symbol(keyword)
           "#{keyword.camelcase(:upper)}Proxy".to_sym
+        end
+        
+        def gtk_constant_symbol(keyword)
+          keyword.camelcase(:upper).to_sym
         end
         
         def keyword(constant_symbol)
@@ -114,7 +120,7 @@ module Glimmer
       end
 
       def respond_to?(method_name, *args, &block)
-        respond_to_libui?(method_name, *args, &block) ||
+        respond_to_gtk?(method_name, *args, &block) ||
           (
             append_properties.include?(method_name.to_s) ||
             (append_properties.include?(method_name.to_s.sub(/\?$/, '')) && BOOLEAN_PROPERTIES.include?(method_name.to_s.sub(/\?$/, ''))) ||
@@ -124,29 +130,20 @@ module Glimmer
           super(method_name, true)
       end
       
-      def respond_to_libui?(method_name, *args, &block)
-        ::Gtk.respond_to?("widget_#{method_name}") ||
-          (::Gtk.respond_to?("widget_#{method_name.to_s.sub(/\?$/, '')}") && BOOLEAN_PROPERTIES.include?(method_name.to_s.sub(/\?$/, '')) ) ||
-          ::Gtk.respond_to?("widget_set_#{method_name.to_s.sub(/=$/, '')}") ||
-          ::Gtk.respond_to?("#{libui_api_keyword}_#{method_name}") ||
-          (::Gtk.respond_to?("#{libui_api_keyword}_#{method_name.to_s.sub(/\?$/, '')}") && BOOLEAN_PROPERTIES.include?(method_name.to_s.sub(/\?$/, '')) ) ||
-          ::Gtk.respond_to?("#{libui_api_keyword}_set_#{method_name.to_s.sub(/=$/, '')}")
+      def respond_to_gtk?(method_name, *args, &block)
+        @gtk.respond_to?(method_name, true)
       end
       
       def method_missing(method_name, *args, &block)
         if respond_to_gtk?(method_name, *args, &block)
           send_to_gtk(method_name, *args, &block)
-        elsif append_properties.include?(method_name.to_s) ||
-            append_properties.include?(method_name.to_s.sub(/(=|\?)$/, ''))
-          append_property(method_name, *args)
-        elsif can_handle_listener?(method_name.to_s)
-          handle_listener(method_name.to_s, &block)
         else
           super
         end
       end
       
       def send_to_gtk(method_name, *args, &block)
+        @gtk.send(method_name, *args, &block)
       end
       
       def gtk_api_keyword

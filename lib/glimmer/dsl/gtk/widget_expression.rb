@@ -29,13 +29,13 @@ module Glimmer
         include ParentExpression
   
         def can_interpret?(parent, keyword, *args, &block)
-          Glimmer::GTK::WidgetProxy.exists?(keyword)
+          Glimmer::Gtk::WidgetProxy.exists?(keyword)
         end
   
         def interpret(parent, keyword, *args, &block)
-          @@inverted_keyword_aliases = Glimmer::GTK::WidgetProxy::KEYWORD_ALIASES.invert unless defined?(@@inverted_keyword_aliases)
+          @@inverted_keyword_aliases = Glimmer::Gtk::WidgetProxy::KEYWORD_ALIASES.invert unless defined?(@@inverted_keyword_aliases)
           keyword = @@inverted_keyword_aliases[keyword] || keyword
-          Glimmer::GTK::WidgetProxy.create(keyword, parent, args, &block)
+          Glimmer::Gtk::WidgetProxy.create(keyword, parent, args, &block)
         end
         
         def add_content(parent, keyword, *args, &block)

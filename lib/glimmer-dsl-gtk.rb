@@ -28,8 +28,9 @@ require 'glimmer'
 # require 'super_module'
 require 'os'
 require 'array_include_methods'
+require 'facets/string/underscore'
 require 'facets/hash/stringify_keys'
-require 'gtk4'
+require 'gtk3'
 
 # Internal requires
 # require 'ext/glimmer/config'
