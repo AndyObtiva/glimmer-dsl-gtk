@@ -42,6 +42,86 @@ Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interes
 - [glimmer-dsl-xml](https://github.com/AndyObtiva/glimmer-dsl-xml): Glimmer DSL for XML (& HTML)
 - [glimmer-dsl-css](https://github.com/AndyObtiva/glimmer-dsl-css): Glimmer DSL for CSS
 
+## Setup
+
+### Option 1: Install
+
+Run this command to install directly:
+```
+gem install glimmer-dsl-gtk
+```
+
+### Option 2: Bundler
+
+Add the following to `Gemfile`:
+```
+gem 'glimmer-dsl-gtk', '~> 0.0.1'
+```
+
+And, then run:
+```
+bundle
+```
+
+## Usage
+
+Require the library and mixing the `Glimmer` module to utilize the Glimmer GUI DSL for GTK:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Demo'
+  
+  on(:destroy) do
+    puts 'Bye Bye'
+    ::Gtk.main_quit
+  end
+}.show
+```
+
+For actual application development outside of simple demos, mixin the `Glimmer` module into an application class instead:
+
+```
+require 'glimmer-dsl-gtk'
+
+class SomeGlimmerApplication
+  include Glimmer
+  
+  def launch
+    application('org.glimmer.hello-application', :flags_none) {
+      on(:activate) do |app|
+        window {
+          title 'Actual Application'
+          
+          on(:destroy) do
+            puts 'Bye Bye'
+            ::Gtk.main_quit
+          end
+        }.present
+      end
+    }.run
+  end
+end
+
+SomeGlimmerApplication.new.launch
+
+## Girb (Glimmer IRB)
+
+You can run the `girb` command (`bin/girb` if you cloned the project locally):
+
+```
+girb
+```
+
+![girb screenshot](/screenshots/glimmer-dsl-gtk-mac-girb.png)
+
+This gives you `irb` with the `glimmer-dsl-gtk` gem loaded and the `Glimmer` module mixed into the main object for easy experimentation with GUI.
+
+Gotcha: On the Mac, when you close a window opened in `girb`, it remains open until you enter exit or open another GUI window.
+
 ## Samples
 
 ### Hello Samples
@@ -53,6 +133,12 @@ Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interes
 Mac Screenshot:
 
 ![hello world screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-world.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_world'"
+```
 
 Run (via locally cloned project):
 
@@ -79,6 +165,12 @@ window {
 Mac Screenshot:
 
 ![hello application screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-application.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_application'"
+```
 
 Run (via locally cloned project):
 

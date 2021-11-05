@@ -20,6 +20,9 @@ Juwelier::Tasks.new do |gem|
   gem.description = %Q{Glimmer DSL for GTK - Ruby-GNOME Desktop Development GUI Library}
   gem.email = "andy.am@gmail.com"
   gem.authors = ["Andy Maleh"]
+  gem.executables = ['girb']
+  gem.files = ['README.md', 'CHANGELOG.md', 'VERSION', 'LICENSE.txt', 'glimmer-dsl-gtk.gemspec', 'bin/**/*', 'lib/**/*', 'icons/**/*', 'samples/**/*']
+  gem.require_paths = ['lib', '.']
 
   # dependencies defined in Gemfile
 end
