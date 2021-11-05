@@ -63,6 +63,14 @@ module Glimmer
           end
         end
         
+        def present
+          super
+          unless @shown_at_least_once
+            @shown_at_least_once = true
+            ::Gtk.main
+          end
+        end
+        
         private
         
         def build_widget
