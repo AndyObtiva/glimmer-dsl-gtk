@@ -65,7 +65,7 @@ bundle
 
 ## Usage
 
-Require the library and mixing the `Glimmer` module to utilize the Glimmer GUI DSL for GTK:
+Require the library and mixin the `Glimmer` module to utilize the Glimmer GUI DSL for GTK:
 
 ```ruby
 require 'glimmer-dsl-gtk'
@@ -107,6 +107,12 @@ class SomeGlimmerApplication
 end
 
 SomeGlimmerApplication.new.launch
+
+### Glimmer GUI DSL
+
+- Keywords: All GTK widgets are supported via lowercase underscored names accepting their constructor args (e.g. `application_window(app)` for `Gtk::ApplicationWindow.new(app)`). Keywords can be nested under other keywords to represent the true hierarchy of nested widgets on the screen. (e.g. `window { label('Hello') }` is a `label` nested under a `window`)
+- Properties: All GTK widget properties can be set via lowercase underscored names without the 'set_' prefix when nested under widgets (e.g. `title 'Hello, World'` sets `title` property of `window`)
+- Signals: All GTK signals can be wired with `on(signal) { ... }` syntax (e.g. `on(:activate) { do_something }`)
 
 ## Girb (Glimmer IRB)
 
@@ -187,7 +193,7 @@ include Glimmer
 
 application('org.glimmer.hello-application', :flags_none) {
   on(:activate) do |app|
-    window {
+    application_window(app) {
       title 'Hello, Application!'
     }.present
   end

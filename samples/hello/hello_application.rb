@@ -4,7 +4,7 @@ include Glimmer
 
 application('org.glimmer.hello-application', :flags_none) {
   on(:activate) do |app|
-    window {
+    application_window(app) {
       title 'Hello, Application!'
     }.present
   end
