@@ -19,26 +19,32 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-$LOAD_PATH.unshift(File.expand_path('..', __FILE__))
+require 'glimmer/dsl/expression'
+require 'glimmer/dsl/parent_expression'
 
-# External requires
-require 'glimmer'
-# require 'logging'
-# require 'puts_debuggerer' if ENV['pd'].to_s.downcase == 'true'
-# require 'super_module'
-require 'os'
-require 'array_include_methods'
-require 'facets/hash/stringify_keys'
-require 'gtk4'
-
-# Internal requires
-# require 'ext/glimmer/config'
-# require 'ext/glimmer'
-require 'glimmer/dsl/gtk/dsl'
-require 'glimmer/gtk'
-Glimmer::Config.loop_max_count = -1
-Glimmer::Config.excluded_keyword_checkers << lambda do |method_symbol, *args|
-  method = method_symbol.to_s
-  result = false
-  result ||= method == 'load_iseq'
+module Glimmer
+  module DSL
+    module Gtk
+      class WidgetExpression < Expression
+        include ParentExpression
+  
+        def can_interpret?(parent, keyword, *args, &block)
+          Glimmer::GTK::WidgetProxy.exists?(keyword)
+        end
+  
+        def interpret(parent, keyword, *args, &block)
+          @@inverted_keyword_aliases = Glimmer::GTK::WidgetProxy::KEYWORD_ALIASES.invert unless defined?(@@inverted_keyword_aliases)
+          keyword = @@inverted_keyword_aliases[keyword] || keyword
+          Glimmer::GTK::WidgetProxy.create(keyword, parent, args, &block)
+        end
+        
+        def add_content(parent, keyword, *args, &block)
+          super
+          parent.post_add_content
+        end
+      end
+    end
+  end
 end
+
+require 'glimmer/gtk/widget_proxy'

@@ -17,7 +17,7 @@ Juwelier::Tasks.new do |gem|
   gem.homepage = "http://github.com/AndyObtiva/glimmer-dsl-gtk"
   gem.license = "MIT"
   gem.summary = %Q{Glimmer DSL for GTK}
-  gem.description = %Q{Glimmer DSL for GTK (GTK4) - Ruby-GNOME Desktop Development GUI Library}
+  gem.description = %Q{Glimmer DSL for GTK - Ruby-GNOME Desktop Development GUI Library}
   gem.email = "andy.am@gmail.com"
   gem.authors = ["Andy Maleh"]
 
