@@ -7,5 +7,6 @@
 - General widget property support (e.g. `title 'Hello, Application!'`)
 - General signal connect support via nested `on` keyword (e.g. `on(:activate) { ... }`)
 - Have `window` automatically call `::Gtk::main_quit` upon hitting `window` close (destroy) button
+- Automatically set `application` first arg to `'org.glimmer-dsl-gtk.application'` and second arg to `:flags_none` when not supplied
 - Hello, World! sample
 - Hello, Application! sample
