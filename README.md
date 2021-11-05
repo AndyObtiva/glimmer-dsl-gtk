@@ -19,11 +19,9 @@
 Hello, World!
 
 ```ruby
-require 'glimmer-dsl-gtk'
-
-include Glimmer
-
 window {
+  title 'Hello, World!'
+  
   label('Hello, World!')
 }.show
 ```
@@ -93,13 +91,8 @@ class SomeGlimmerApplication
   def launch
     application('org.glimmer.hello-application', :flags_none) {
       on(:activate) do |app|
-        window {
+        application_window(app) {
           title 'Actual Application'
-          
-          on(:destroy) do
-            puts 'Bye Bye'
-            ::Gtk.main_quit
-          end
         }.present
       end
     }.run
@@ -111,9 +104,10 @@ SomeGlimmerApplication.new.launch
 
 ### Glimmer GUI DSL
 
-- Keywords: All GTK widgets are supported via lowercase underscored names accepting their constructor args (e.g. `application_window(app)` for `Gtk::ApplicationWindow.new(app)`). Keywords can be nested under other keywords to represent the true hierarchy of nested widgets on the screen. (e.g. `window { label('Hello') }` is a `label` nested under a `window`)
-- Properties: All GTK widget properties can be set via lowercase underscored names without the 'set_' prefix when nested under widgets (e.g. `title 'Hello, World'` sets `title` property of `window`)
-- Signals: All GTK signals can be wired with `on(signal) { ... }` syntax (e.g. `on(:activate) { do_something }`)
+- Keywords: All GTK widgets are supported via lowercase underscored names accepting their constructor args (e.g. `application_window(app)` for `Gtk::ApplicationWindow.new(app)`). Keywords can be nested under other keywords to represent the true hierarchy of nested widgets on the screen (e.g. `window { label('Hello') }` is a `label` nested under a `window`). Note that widget objects returned are proxies of the GTK widget counterparts. This shields consumers of GTK from its lower-level details via composition (Proxy Design Pattern). To access lower-level GTK widget, simply call `#gtk` method on widget proxy object (e.g. `@w = window {...}; @w.gtk # Gtk::Window widget object`).
+- Content: widget keywords can have a block of content that could contain nested widget keywords, properties, and signals. The block can optionally receive one argument representing the widget (e.g. `window {|w| ... }`):
+  - Properties: All GTK widget properties can be set via lowercase underscored names (without the 'set_' prefix) nested under widget keywords (e.g. `window {title 'Hello, World'}` sets `title` property of `window`)
+  - Signals: All GTK signals can be wired with `on(signal) { ... }` syntax (e.g. `on(:activate) { do_something }`)
 
 ## Girb (Glimmer IRB)
 
@@ -144,7 +138,7 @@ Mac Screenshot:
 Run (via installed gem):
 
 ```
-ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_world'"
+ruby -r glimmer-dsl-gtk -e "require 'samples/hello/hello_world'"
 ```
 
 Run (via locally cloned project):
@@ -156,11 +150,9 @@ ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_world.rb
 Code:
 
 ```ruby
-require 'glimmer-dsl-gtk'
-
-include Glimmer
-
 window {
+  title 'Hello, World!'
+  
   label('Hello, World!')
 }.show
 ```
@@ -176,7 +168,7 @@ Mac Screenshot:
 Run (via installed gem):
 
 ```
-ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_application'"
+ruby -r glimmer-dsl-gtk -e "require 'samples/hello/hello_application'"
 ```
 
 Run (via locally cloned project):
@@ -214,7 +206,7 @@ Mac Screenshot:
 Run (via installed gem):
 
 ```
-ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_button'"
+ruby -r glimmer-dsl-gtk -e "require 'samples/hello/hello_button'"
 ```
 
 Run (via locally cloned project):
@@ -261,7 +253,7 @@ Mac Screenshot:
 Run (via installed gem):
 
 ```
-ruby -r glimmer-dsl-gtk.rb -e "require 'samples/hello/hello_entry'"
+ruby -r glimmer-dsl-gtk -e "require 'samples/hello/hello_entry'"
 ```
 
 Run (via locally cloned project):
