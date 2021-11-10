@@ -80,9 +80,9 @@ window {
 }.show
 ```
 
-For actual application development outside of simple demos, mixin the `Glimmer` module into an application class instead:
+For actual application development outside of simple demos, mixin the `Glimmer` module into a custom application class instead:
 
-```
+```ruby
 require 'glimmer-dsl-gtk'
 
 class SomeGlimmerApplication
