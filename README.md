@@ -28,7 +28,11 @@ window {
 
 Mac Screenshot:
 
-![hello world screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-world.png)
+![hello world screenshot Mac](/screenshots/glimmer-dsl-gtk-mac-hello-world.png)
+
+Windows Screenshot:
+
+![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
 
 NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
 
@@ -117,7 +121,13 @@ You can run the `girb` command (`bin/girb` if you cloned the project locally):
 girb
 ```
 
+Mac Screenshot:
+
 ![girb screenshot](/screenshots/glimmer-dsl-gtk-mac-girb.png)
+
+Windows Screenshot:
+
+![girb screenshot](/screenshots/glimmer-dsl-gtk-windows-girb.png)
 
 This gives you `irb` with the `glimmer-dsl-gtk` gem loaded and the `Glimmer` module mixed into the main object for easy experimentation with GUI.
 
@@ -134,6 +144,10 @@ Gotcha: On the Mac, when you close a window opened in `girb`, it remains open un
 Mac Screenshot:
 
 ![hello world screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-world.png)
+
+Windows Screenshot:
+
+![hello world screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
 
 Run (via installed gem):
 
@@ -164,6 +178,10 @@ window {
 Mac Screenshot:
 
 ![hello application screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-application.png)
+
+Windows Screenshot:
+
+![hello application screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-application.png)
 
 Run (via installed gem):
 
@@ -197,11 +215,17 @@ application('org.glimmer.hello-application', :flags_none) {
 
 [samples/hello/hello_button.rb](/samples/hello/hello_button.rb)
 
-Mac Screenshot:
+Mac Screenshots:
 
 ![hello button screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-button.png)
 
 ![hello button clicked screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-button-clicked.png)
+
+Windows Screenshots:
+
+![hello button screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-button.png)
+
+![hello button clicked screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-button-clicked.png)
 
 Run (via installed gem):
 
@@ -244,11 +268,17 @@ window { |w|
 
 [samples/hello/hello_entry.rb](/samples/hello/hello_entry.rb)
 
-Mac Screenshot:
+Mac Screenshots:
 
 ![hello entry screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-entry.png)
 
 ![hello entry submitted screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-entry-submitted.png)
+
+Windows Screenshots:
+
+![hello entry screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-entry.png)
+
+![hello entry submitted screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-entry-submitted.png)
 
 Run (via installed gem):
 
