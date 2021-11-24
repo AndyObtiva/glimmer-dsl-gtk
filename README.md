@@ -28,7 +28,7 @@ window {
 
 Linux | Mac | Windows
 ------|-----|--------
-![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png) | ![hello world screenshot Mac](/screenshots/glimmer-dsl-gtk-mac-hello-world.png) | ![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
+![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-linux-hello-world.png) | ![hello world screenshot Mac](/screenshots/glimmer-dsl-gtk-mac-hello-world.png) | ![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
 
 NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
 
@@ -39,7 +39,32 @@ Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interes
 - [glimmer-dsl-libui](https://github.com/AndyObtiva/glimmer-dsl-libui): Glimmer DSL for Tk (Prerequisite-Free Ruby Desktop Development GUI Library)
 - [glimmer-dsl-xml](https://github.com/AndyObtiva/glimmer-dsl-xml): Glimmer DSL for XML (& HTML)
 - [glimmer-dsl-css](https://github.com/AndyObtiva/glimmer-dsl-css): Glimmer DSL for CSS
-- [glimmer-dsl-specification](https://github.com/AndyObtiva/glimmer-dsl-specification): Glimmer DSL for Specification (Pure Ruby Declarative Use Case Specification and Automated Verification)
+
+## Pre-Requisites
+
+### Linux
+
+GNOME-based Linux installations do not need any pre-requisites since they have GTK built-in, so you can move on to [Setup](#setup) right away.
+
+Still, if you run into issues installing the GTK gem in [Setup](#setup), you may try these commands first:
+```
+sudo apt-get install libgtk-3-dev
+```
+
+Or run this command if all else fails:
+```
+sudo apt install -y -V libgirepository1.0-dev
+```
+
+### Mac
+
+On the Mac, make sure to:
+- Have [Homebrew](https://brew.sh/) installed
+- Run this [Homebrew](https://brew.sh/) command to have GTK display GUI icons: `brew install adwaita-icon-theme`
+
+### Windows
+
+Make sure to install [Ruby](https://www.ruby-lang.org) with MSYS & MING toolchains from [RubyInstaller](https://rubyinstaller.org/downloads/)
 
 ## Setup
 
@@ -144,7 +169,7 @@ Gotcha: On the Mac, when you close a window opened in `girb`, it remains open un
 
 Linux | Mac | Windows
 ------|-----|--------
-![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png) | ![hello world screenshot Mac](/screenshots/glimmer-dsl-gtk-mac-hello-world.png) | ![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
+![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-linux-hello-world.png) | ![hello world screenshot Mac](/screenshots/glimmer-dsl-gtk-mac-hello-world.png) | ![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
 
 Run (via installed gem):
 
