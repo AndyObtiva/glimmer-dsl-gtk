@@ -27,7 +27,7 @@ application('org.glimmer.hello-application') {
             label('Combo Box Text')
             cb = combo_box_text {
             }
-            3.times { |n| cb.append_text "Option #{n+1}" }
+            3.times { |n| cb.append_text "Option #{n + 1}" }
           }
         }
         n.set_tab_label_text(f1.gtk, 'Text')
@@ -72,6 +72,20 @@ application('org.glimmer.hello-application') {
         
         f4 = frame {
           box(:vertical) {
+            label('Expander')
+            3.times do |n|
+              expander {
+                label "Item #{n + 1}"
+                label("Item #{n + 1} Expanded") {
+                }
+              }
+            end
+          }
+        }
+        n.set_tab_label_text(f4.gtk, 'Organizer')
+        
+        f5 = frame {
+          box(:vertical) {
             label('Progress Bar')
             pb = progress_bar {
               text 'Progress Bar'
@@ -89,7 +103,7 @@ application('org.glimmer.hello-application') {
             }
           }
         }
-        n.set_tab_label_text(f4.gtk, 'Progress')
+        n.set_tab_label_text(f5.gtk, 'Progress')
       }
     }.present
   end
