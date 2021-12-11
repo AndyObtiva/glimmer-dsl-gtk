@@ -40,11 +40,11 @@ Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interes
 - [glimmer-dsl-xml](https://github.com/AndyObtiva/glimmer-dsl-xml): Glimmer DSL for XML (& HTML)
 - [glimmer-dsl-css](https://github.com/AndyObtiva/glimmer-dsl-css): Glimmer DSL for CSS
 
-## Pre-Requisites
+## Prerequisites
 
 ### Linux
 
-GNOME-based Linux installations do not need any pre-requisites since they have GTK built-in, so you can move on to [Setup](#setup) right away.
+GNOME-based Linux installations do not need any pre-requisites since they have GTK built-in, so you can skip to [Setup](#setup) right away.
 
 Still, if you run into issues installing the GTK gem in [Setup](#setup), you may try these commands first:
 ```
@@ -160,6 +160,8 @@ This gives you `irb` with the `glimmer-dsl-gtk` gem loaded and the `Glimmer` mod
 Gotcha: On the Mac, when you close a window opened in `girb`, it remains open until you enter exit or open another GUI window.
 
 ## Samples
+
+You may checkout the [samples](samples) directory for examples of using [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk).
 
 ### Hello Samples
 
@@ -329,6 +331,36 @@ window { |w|
 }.show
 ```
 
+## Resources
+
+- Ruby-Gnome Project: https://github.com/ruby-gnome/ruby-gnome
+- GTK3 API Documentation: https://gnome.pages.gitlab.gnome.org/gtk/gtk3/
+- GTK Widget Gallery: https://python-gtk-3-tutorial.readthedocs.io/en/latest/gallery.html
+
+## Process
+
+[Glimmer Process](https://github.com/AndyObtiva/glimmer/blob/master/PROCESS.md)
+
+## Help
+
+### Issues
+
+If you encounter [issues](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues) that are not reported, discover missing features that are not mentioned in [TODO.md](TODO.md), or think up better ways to use GTK than what is possible with [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you may submit an [issue](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues/new) or [pull request](https://github.com/AndyObtiva/glimmer-dsl-gtk/compare) on [GitHub](https://github.com). In the meantime while waiting for a fix, you may try older gem versions of [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk) in case you find one that does not have the issue and actually works.
+
+### Chat
+
+If you need live help, try to [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## Planned Features and Feature Suggestions
+
+These features have been planned or suggested. You might see them in a future version of [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk). You are welcome to contribute more feature suggestions.
+
+[TODO.md](TODO.md)
+
+## Change Log
+
+[CHANGELOG.md](CHANGELOG.md)
+
 ## Contributing
 
 -   Check out the latest master to make sure the feature hasn't been
@@ -344,16 +376,6 @@ window { |w|
     you want to have your own version, or is otherwise necessary, that
     is fine, but please isolate to its own commit so I can cherry-pick
     around it.
-
-## Planned Features and Feature Suggestions
-
-These features have been planned or suggested. You might see them in a future version of [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk). You are welcome to contribute more feature suggestions.
-
-[TODO.md](TODO.md)
-
-## Change Log
-
-[CHANGELOG.md](CHANGELOG.md)
 
 ## Contributors
 
