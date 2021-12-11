@@ -7,8 +7,8 @@ application('org.glimmer.hello-application') {
     application_window(app) {
       title 'Widget Gallery'
       
-      notebook {
-        frame {
+      notebook { |n|
+        f1 = frame {
           box(:vertical) {
             label('Entry')
             entry {
@@ -23,11 +23,20 @@ application('org.glimmer.hello-application') {
             label('Spin Button')
             spin_button(1, 100, 1) {
             }
+            
+            label('Combo Box Text')
+            cb = combo_box_text {
+            }
+            3.times { |n| cb.append_text "Option #{n+1}" }
           }
         }
+        n.set_tab_label_text(f1.gtk, 'Text')
         
-        frame {
+        f2 = frame {
           box(:vertical) {
+            label('Button')
+            button('Push Me')
+            
             label('Radio Button')
             box(:horizontal) {
               rb = radio_button('One')
@@ -41,15 +50,11 @@ application('org.glimmer.hello-application') {
               check_button('Two')
               check_button('Three')
             }
-            
-            label('Combo Box Text')
-            cb = combo_box_text {
-            }
-            3.times { |n| cb.append_text "Option #{n+1}" }
           }
         }
+        n.set_tab_label_text(f2.gtk, 'Button')
         
-        frame {
+        f3 = frame {
           box(:vertical) {
             label('Horizontal Scale')
             h_scale(1, 100, 1) {
@@ -63,9 +68,9 @@ application('org.glimmer.hello-application') {
             }
           }
         }
+        n.set_tab_label_text(f3.gtk, 'Selection')
         
-        
-        frame {
+        f4 = frame {
           box(:vertical) {
             label('Progress Bar')
             pb = progress_bar {
@@ -84,6 +89,7 @@ application('org.glimmer.hello-application') {
             }
           }
         }
+        n.set_tab_label_text(f4.gtk, 'Progress')
       }
     }.present
   end
