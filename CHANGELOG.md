@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.2
+
+- Support re-opening any widget proxy content with `#content {}`
+
 ## 0.0.1
 
 - Initial version of Glimmer DSL for GTK

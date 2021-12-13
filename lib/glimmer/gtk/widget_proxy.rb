@@ -144,7 +144,7 @@ module Glimmer
       end
       
       def content(&block)
-        Glimmer::DSL::Engine.add_content(self, Glimmer::DSL::Libui::WidgetExpression.new, @keyword, &block)
+        Glimmer::DSL::Engine.add_content(self, Glimmer::DSL::Gtk::WidgetExpression.new, @keyword, &block)
       end
             
       private
