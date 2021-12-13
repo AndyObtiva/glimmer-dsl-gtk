@@ -335,7 +335,7 @@ window { |w|
 
 - Ruby-Gnome Project: https://github.com/ruby-gnome/ruby-gnome
 - GTK3 API Documentation: https://gnome.pages.gitlab.gnome.org/gtk/gtk3/
-- GTK Widget Gallery: https://python-gtk-3-tutorial.readthedocs.io/en/latest/gallery.html
+- GTK3 Widget Gallery: https://docs.gtk.org/gtk3/visual_index.html
 
 ## Process
 

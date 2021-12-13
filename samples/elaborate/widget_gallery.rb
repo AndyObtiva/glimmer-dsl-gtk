@@ -10,6 +10,8 @@ application('org.glimmer.hello-application') {
       notebook { |n|
         f1 = frame {
           box(:vertical) {
+            spacing 10
+            
             label('Entry')
             entry {
               text 'Enter One Line of Text'
@@ -34,6 +36,8 @@ application('org.glimmer.hello-application') {
         
         f2 = frame {
           box(:vertical) {
+            spacing 10
+            
             label('Button')
             button('Push Me')
             
@@ -56,6 +60,8 @@ application('org.glimmer.hello-application') {
         
         f3 = frame {
           box(:vertical) {
+            spacing 10
+            
             label('Horizontal Scale')
             h_scale(1, 100, 1) {
               visible true
@@ -72,10 +78,13 @@ application('org.glimmer.hello-application') {
         
         f4 = frame {
           box(:vertical) {
+            spacing 10
+            
             label('Expander')
             3.times do |n|
               expander {
                 label "Item #{n + 1}"
+                
                 label("Item #{n + 1} Expanded") {
                 }
               }
@@ -86,6 +95,8 @@ application('org.glimmer.hello-application') {
         
         f5 = frame {
           box(:vertical) {
+            spacing 10
+            
             label('Progress Bar')
             pb = progress_bar {
               text 'Progress Bar'
