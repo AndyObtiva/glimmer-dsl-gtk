@@ -24,12 +24,12 @@ module Glimmer
   module Gtk
     class << self
       def respond_to?(method_name, *args)
-        super || ::LibUI.respond_to?(method_name, *args)
+        super || ::Gtk.respond_to?(method_name, *args)
       end
       
       def method_missing(method_name, *args, &block)
-        if ::LibUI.respond_to?(method_name, true)
-          ::LibUI.send(method_name, *args, &block)
+        if ::Gtk.respond_to?(method_name, true)
+          ::Gtk.send(method_name, *args, &block)
         else
           super
         end
