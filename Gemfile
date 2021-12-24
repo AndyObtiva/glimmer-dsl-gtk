@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'glimmer', '~> 2.4.0' #, path: '../glimmer'
+gem 'glimmer', '~> 2.5.4' #, path: '../glimmer'
 gem 'os', '>= 1.0.0', '< 2.0.0'
 gem 'gtk3', '~> 3.4.9'
 
