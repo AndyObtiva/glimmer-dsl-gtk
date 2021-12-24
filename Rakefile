@@ -15,7 +15,7 @@ Juwelier::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "glimmer-dsl-gtk"
   gem.homepage = "http://github.com/AndyObtiva/glimmer-dsl-gtk"
-  gem.license = "MIT"
+  gem.license = "LGPL"
   gem.summary = %Q{Glimmer DSL for GTK}
   gem.description = %Q{Glimmer DSL for GTK - Ruby-GNOME Desktop Development GUI Library}
   gem.email = "andy.am@gmail.com"

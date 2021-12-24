@@ -385,7 +385,7 @@ These features have been planned or suggested. You might see them in a future ve
 
 ## Copyright
 
-[MIT](LICENSE.txt)
+[LGPL](LICENSE.txt)
 
 Copyright (c) 2021 Andy Maleh.
 
