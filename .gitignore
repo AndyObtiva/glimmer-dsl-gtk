@@ -50,4 +50,6 @@ pkg
 
 # Gladiator (Glimmer Editor)
 .gladiator
+.gladiator-scratchpad
 
+tmp
