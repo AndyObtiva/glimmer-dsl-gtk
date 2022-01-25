@@ -615,12 +615,6 @@ window {
 
 #### Widget Gallery
 
-glimmer-dsl-gtk-mac-elaborate-widget-gallery-text.png
-glimmer-dsl-gtk-mac-elaborate-widget-gallery-button.png
-glimmer-dsl-gtk-mac-elaborate-widget-gallery-selection.png
-glimmer-dsl-gtk-mac-elaborate-widget-gallery-organizer.png
-glimmer-dsl-gtk-mac-elaborate-widget-gallery-progress.png
-
 [samples/elaborate/widget_gallery.rb](/samples/elaborate/widget_gallery.rb)
 
 Linux | Mac | Windows
