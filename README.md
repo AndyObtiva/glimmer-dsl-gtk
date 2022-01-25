@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.1
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.2
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -79,7 +79,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.1'
+gem 'glimmer-dsl-gtk', '~> 0.0.2'
 ```
 
 And, then run:
@@ -200,7 +200,7 @@ window {
 [samples/hello/hello_application.rb](/samples/hello/hello_application.rb)
 
 Linux | Mac | Windows
-------|----|--------
+------|-----|--------
 ![hello application screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-application.png) | ![hello application screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-application.png) | ![hello application screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-application.png)
 
 Run (via installed gem):
@@ -236,7 +236,7 @@ application('org.glimmer.hello-application', :flags_none) {
 [samples/hello/hello_button.rb](/samples/hello/hello_button.rb)
 
 Linux | Mac | Windows
-------|----|--------
+------|-----|--------
 ![hello button screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-button.png) ![hello button clicked screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-button-clicked.png) | ![hello button screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-button.png) ![hello button clicked screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-button-clicked.png) | ![hello button screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-button.png) ![hello button clicked screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-button-clicked.png)
 
 Run (via installed gem):
@@ -281,7 +281,7 @@ window { |w|
 [samples/hello/hello_entry.rb](/samples/hello/hello_entry.rb)
 
 Linux | Mac | Windows
-------|----|--------
+------|-----|--------
 ![hello entry screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-entry.png) ![hello entry submitted screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-entry-submitted.png) | ![hello entry screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-entry.png) ![hello entry submitted screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-entry-submitted.png) | ![hello entry screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-entry.png) ![hello entry submitted screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-entry-submitted.png)
 
 Run (via installed gem):
@@ -327,6 +327,286 @@ window { |w|
         }.show
       end
     }
+  }
+}.show
+```
+
+#### Hello, Drawing Area!
+
+This demonstrates the very intuitive (Glimmer-only) declarative cairo shape drawing syntax for the `drawing_area` widget.
+
+[samples/hello/hello_drawing_area.rb](/samples/hello/hello_drawing_area.rb)
+
+Linux | Mac | Windows
+------|-----|--------
+![hello drawing area screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-drawing-area.png) | ![hello drawing area screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-drawing-area.png) | ![hello drawing area screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-drawing-area.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk -e "require 'samples/hello/hello_drawing_area'"
+```
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_drawing_area.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Hello, Drawing Area!'
+  default_size 400, 400
+  
+  drawing_area {
+    rectangle(0, 0, 400, 400) {
+      fill 255, 255, 255
+    }
+    
+    arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90) {
+      fill 255, 0, 0
+      stroke 0, 128, 255
+      line_width 3
+    }
+
+    arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30) {
+      fill 255, 0, 0
+      stroke 0, 128, 255
+      line_width 3
+    }
+    
+    circle(85, 285, 45) {
+      fill 255, 0, 0
+      stroke 0, 128, 255
+      line_width 3
+    }
+    
+    rectangle(140, 40, 180, 90) {
+      fill 255, 255, 0
+      stroke 255, 0, 0
+      line_width 3
+    }
+    
+    rounded_rectangle(140, 140, 180, 90, 30, 20) {
+      fill 255, 255, 0
+      stroke 255, 0, 0
+      line_width 3
+    }
+
+    triangle(140, 240, 320, 240, 230, 330) {
+      fill 255, 255, 0
+      stroke 255, 0, 0
+      line_width 3
+    }
+
+    path {
+      move_to 160, 100
+      curve_to 190, 60, 200, 80, 210, 70
+      curve_to 240, 80, 250, 100, 260, 90
+      curve_to 290, 90, 300, 110, 310, 100
+
+      fill 0, 255, 0
+      stroke 0, 0, 255
+      line_width 3
+    }
+
+    path {
+      move_to 200, 150
+      line_to 270, 170
+      line_to 250, 220
+      line_to 220, 190
+      line_to 200, 200
+      line_to 180, 170
+      close_path
+
+      fill 0, 255, 0
+      stroke 0, 0, 255
+      line_width 3
+    }
+    
+    polygon(200, 260, 270, 270, 250, 290, 220, 290, 200, 280, 180, 270) {
+      fill 0, 255, 0
+      stroke 0, 0, 255
+      line_width 3
+    }
+    
+    polyline(270, 320, 250, 340, 220, 340, 200, 330, 180, 320) {
+      stroke 0, 0, 255
+      line_width 3
+    }
+  }
+}.show
+```
+
+#### Hello, Drawing Area (Manual)!
+
+This demonstrates the manual (non-Glimmer) imperative cairo shape drawing syntax for the `drawing_area` widget (might be useful in very exceptional rare cases).
+
+[samples/hello/hello_drawing_area_manual.rb](/samples/hello/hello_drawing_area_manual.rb)
+
+Linux | Mac | Windows
+------|-----|--------
+![hello drawing area manual screenshot](/screenshots/glimmer-dsl-gtk-linux-hello-drawing-area-manual.png) | ![hello drawing area manual screenshot](/screenshots/glimmer-dsl-gtk-mac-hello-drawing-area-manual.png) | ![hello drawing area manual screenshot](/screenshots/glimmer-dsl-gtk-windows-hello-drawing-area-manual.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk -e "require 'samples/hello/hello_drawing_area_manual'"
+```
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/hello/hello_drawing_area_manual.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Hello, Drawing Area (Manual)!'
+  default_size 400, 400
+  
+  drawing_area {
+    on(:draw) do |drawing_area_widget, cairo_context|
+      cairo_context.rectangle(0, 0, 400, 400)
+      cairo_context.set_source_rgb(255, 255, 255)
+      cairo_context.fill
+      
+      cairo_context.arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90)
+      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.fill
+      
+      cairo_context.arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90)
+      cairo_context.set_source_rgb(0, 128, 255)
+      cairo_context.set_line_width(3)
+      cairo_context.stroke
+
+      cairo_context.arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30)
+      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.fill
+      
+      cairo_context.arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30)
+      cairo_context.set_source_rgb(0, 128, 255)
+      cairo_context.set_line_width(3)
+      cairo_context.stroke
+      
+      cairo_context.circle(85, 285, 45)
+      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.fill
+      
+      cairo_context.circle(85, 285, 45)
+      cairo_context.set_source_rgb(0, 128, 255)
+      cairo_context.set_line_width(3)
+      cairo_context.stroke
+      
+      cairo_context.rectangle(140, 40, 180, 90)
+      cairo_context.set_source_rgb(255, 255, 0)
+      cairo_context.fill
+      
+      cairo_context.rectangle(140, 40, 180, 90)
+      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_line_width(3)
+      cairo_context.stroke
+      
+      cairo_context.rounded_rectangle(140, 140, 180, 90, 30, 20)
+      cairo_context.set_source_rgb(255, 255, 0)
+      cairo_context.fill
+      
+      cairo_context.rounded_rectangle(140, 140, 180, 90, 30, 20)
+      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_line_width(3)
+      cairo_context.stroke
+      
+      cairo_context.triangle(140, 240, 320, 240, 230, 330)
+      cairo_context.set_source_rgb(255, 255, 0)
+      cairo_context.fill
+      
+      cairo_context.triangle(140, 240, 320, 240, 230, 330)
+      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_line_width(3)
+      cairo_context.stroke
+      
+      cairo_context.new_path
+      cairo_context.move_to 160, 100
+      cairo_context.curve_to 190, 60, 200, 80, 210, 70
+      cairo_context.curve_to 240, 80, 250, 100, 260, 90
+      cairo_context.curve_to 290, 90, 300, 110, 310, 100
+      cairo_context.set_source_rgb(0, 255, 0)
+      cairo_context.fill
+      
+      cairo_context.new_path
+      cairo_context.move_to 160, 100
+      cairo_context.curve_to 190, 60, 200, 80, 210, 70
+      cairo_context.curve_to 240, 80, 250, 100, 260, 90
+      cairo_context.curve_to 290, 90, 300, 110, 310, 100
+      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.stroke
+      
+      cairo_context.new_path
+      cairo_context.move_to 200, 150
+      cairo_context.line_to 270, 170
+      cairo_context.line_to 250, 220
+      cairo_context.line_to 220, 190
+      cairo_context.line_to 200, 200
+      cairo_context.line_to 180, 170
+      cairo_context.close_path
+      cairo_context.set_source_rgb(0, 255, 0)
+      cairo_context.fill
+      
+      cairo_context.new_path
+      cairo_context.move_to 200, 150
+      cairo_context.line_to 270, 170
+      cairo_context.line_to 250, 220
+      cairo_context.line_to 220, 190
+      cairo_context.line_to 200, 200
+      cairo_context.line_to 180, 170
+      cairo_context.close_path
+      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.stroke
+      
+      cairo_context.new_path
+      cairo_context.move_to 200, 260
+      cairo_context.line_to 270, 270
+      cairo_context.line_to 250, 290
+      cairo_context.line_to 220, 290
+      cairo_context.line_to 200, 280
+      cairo_context.line_to 180, 270
+      cairo_context.close_path
+      cairo_context.set_source_rgb(0, 255, 0)
+      cairo_context.fill
+      
+      cairo_context.new_path
+      cairo_context.move_to 200, 260
+      cairo_context.line_to 270, 270
+      cairo_context.line_to 250, 290
+      cairo_context.line_to 220, 290
+      cairo_context.line_to 200, 280
+      cairo_context.line_to 180, 270
+      cairo_context.close_path
+      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.stroke
+      
+      cairo_context.new_path
+      cairo_context.move_to 200, 260
+      cairo_context.move_to 270, 320
+      cairo_context.line_to 250, 340
+      cairo_context.line_to 220, 340
+      cairo_context.line_to 200, 330
+      cairo_context.line_to 180, 320
+      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.stroke
+    end
   }
 }.show
 ```
