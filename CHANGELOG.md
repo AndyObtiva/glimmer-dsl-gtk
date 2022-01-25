@@ -3,7 +3,7 @@
 ## 0.0.2
 
 - Support re-opening any widget proxy content with `#content {}` block to add more nested widgets inside
-- Paint `drawing_area` Cairo shapes declaratively
+- Draw `drawing_area` Cairo shapes declaratively with keywords: `rectangle`, `rounded_rectangle`, `arc`, `triangle`, `circle`, `polygon`, `polyline`, `path`
 - samples/hello/hello_drawing_area.rb (declarative cairo drawing)
 - samples/hello/hello_drawing_area_manual.rb (use cairo manually with imperative syntax)
 - samples/elaborate/widget_gallery.rb

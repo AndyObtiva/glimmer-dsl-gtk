@@ -3,7 +3,7 @@ require 'glimmer-dsl-gtk'
 include Glimmer
 
 window {
-  title 'Hello, World!'
+  title 'Hello, Drawing Area (Manual)!'
   default_size 360, 260
   
   drawing_area {

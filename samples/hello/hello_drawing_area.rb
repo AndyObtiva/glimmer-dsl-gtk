@@ -3,7 +3,7 @@ require 'glimmer-dsl-gtk'
 include Glimmer
 
 window {
-  title 'Hello, World!'
+  title 'Hello, Drawing Area!'
   default_size 400, 400
   
   drawing_area {
@@ -11,7 +11,7 @@ window {
       fill 255, 255, 255
     }
     
-    arc(85, 85, 45, (Math::PI/180)*100, -(Math::PI/180)*100) {
+    arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90) {
       fill 255, 0, 0
       stroke 0, 128, 255
       line_width 3
@@ -74,6 +74,11 @@ window {
     
     polygon(200, 260, 270, 270, 250, 290, 220, 290, 200, 280, 180, 270) {
       fill 0, 255, 0
+      stroke 0, 0, 255
+      line_width 3
+    }
+    
+    polyline(270, 320, 250, 340, 220, 340, 200, 330, 180, 320) {
       stroke 0, 0, 255
       line_width 3
     }
