@@ -65,13 +65,13 @@ module Glimmer
     module Gtk
       class PropertyExpression < Expression
         def can_interpret?(parent, keyword, *args, &block)
-          parent.is_a?(Glimmer::Gtk::WidgetProxy) and
+          (parent.is_a?(Glimmer::Gtk::WidgetProxy) || parent.is_a?(Glimmer::Gtk::Shape)) and
             block.nil? and
-            parent.respond_to?(keyword, *args)
+            parent.respond_to?(keyword)
         end
   
         def interpret(parent, keyword, *args, &block)
-          parent.send(keyword, *args)
+          parent.send("set_#{keyword}", *args)
         end
       end
     end

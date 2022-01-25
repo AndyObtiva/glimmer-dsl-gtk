@@ -57,28 +57,37 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
-require 'glimmer/dsl/engine'
-Dir[File.expand_path('*_expression.rb', __dir__)].each {|f| require f}
-
-# Glimmer DSL expression configuration module
-#
-# When DSL engine interprets an expression, it attempts to handle
-# with expressions listed here in the order specified.
-
-# Every expression has a corresponding Expression subclass
-# in glimmer/dsl
-
 module Glimmer
-  module DSL
-    module Gtk
-      Engine.add_dynamic_expressions(
-        Gtk,
-        %w[
-          property
-          widget
-          shape
-        ]
-      )
+  module Gtk
+    class WidgetProxy
+      # Proxy for Gtk drawing area objects
+      #
+      # Follows the Proxy Design Pattern
+      class DrawingAreaProxy < WidgetProxy
+        attr_reader :shapes
+  
+        def initialize(keyword, parent, args, &block)
+          @shapes = []
+          super
+        end
+        
+        def post_add_content
+          super
+          @gtk.signal_connect(:draw) do |drawing_area_widget, cairo_context|
+            shapes.each do |shape|
+              shape.draw(drawing_area_widget, cairo_context)
+            end
+          end
+        end
+        
+        def post_initialize_child(child)
+          if child.is_a?(Glimmer::Gtk::Shape)
+            shapes << child
+          else
+            super
+          end
+        end
+      end
     end
   end
 end

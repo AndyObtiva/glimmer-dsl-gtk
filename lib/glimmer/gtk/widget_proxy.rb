@@ -64,9 +64,13 @@ module Glimmer
     # Follows the Proxy Design Pattern
     class WidgetProxy
       class << self
-        def exists?(keyword)
+        def exist?(keyword)
           ::Gtk.const_get(gtk_constant_symbol(keyword)) ||
             widget_proxy_class(keyword)
+        rescue => e
+          Glimmer::Config.logger.debug {"No widget exists for keyword: #{keyword}"}
+          Glimmer::Config.logger.debug {e.full_message}
+          false
         end
         
         def create(keyword, parent, args, &block)
@@ -75,9 +79,6 @@ module Glimmer
         
         def widget_proxy_class(keyword)
           descendant_keyword_constant_map[keyword] || WidgetProxy
-        end
-        
-        def new_widget(keyword, args)
         end
         
         def constant_symbol(keyword)
@@ -129,7 +130,7 @@ module Glimmer
       
       # gtk returns the contained Gtk object
       attr_reader :parent_proxy, :gtk, :args, :keyword, :block
-      
+
       def initialize(keyword, parent, args, &block)
         @keyword = keyword
         @parent_proxy = parent
@@ -158,13 +159,13 @@ module Glimmer
         found_proxy
       end
 
-      def respond_to?(method_name, *args, &block)
-        respond_to_gtk?(method_name, *args, &block) ||
-          super(method_name, true)
+      def respond_to?(method_name, include_private = false, &block)
+        respond_to_gtk?(method_name, include_private, &block) ||
+          super(method_name, include_private)
       end
       
-      def respond_to_gtk?(method_name, *args, &block)
-        @gtk.respond_to?(method_name, true) || @gtk.respond_to?("set_#{method_name}", true)
+      def respond_to_gtk?(method_name, include_private = false, &block)
+        @gtk.respond_to?(method_name, include_private) || @gtk.respond_to?("set_#{method_name}", include_private)
       end
       
       def method_missing(method_name, *args, &block)
@@ -200,4 +201,5 @@ module Glimmer
   end
 end
 
-Dir[File.expand_path('./widget_proxy/*.rb', __dir__)].each {|f| require f}
+Dir[File.expand_path("./#{File.basename(__FILE__, '.rb')}/*.rb", __dir__)].each {|f| require f}
+require 'glimmer/gtk/shape'

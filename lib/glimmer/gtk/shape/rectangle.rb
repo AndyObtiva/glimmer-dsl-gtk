@@ -57,28 +57,32 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
-require 'glimmer/dsl/engine'
-Dir[File.expand_path('*_expression.rb', __dir__)].each {|f| require f}
-
-# Glimmer DSL expression configuration module
-#
-# When DSL engine interprets an expression, it attempts to handle
-# with expressions listed here in the order specified.
-
-# Every expression has a corresponding Expression subclass
-# in glimmer/dsl
-
 module Glimmer
-  module DSL
-    module Gtk
-      Engine.add_dynamic_expressions(
-        Gtk,
-        %w[
-          property
-          widget
-          shape
-        ]
-      )
+  module Gtk
+    # Represents Gtk shape objects drawn on area widget, like rectangle, arc, and path
+    class Shape
+      class Rectangle < Shape
+
+        # Subclasses must implement
+        def draw(drawing_area_widget, cairo_context)
+          if @fill
+            cairo_context.rectangle(*@args)
+            cairo_context.set_source_rgb(*@fill)
+            # TODO handle rgba case
+            cairo_context.fill
+          end
+          
+          if @stroke
+            cairo_context.rectangle(*@args)
+            cairo_context.set_source_rgb(*@stroke)
+            # TODO handle rgba case
+            cairo_context.set_line_width(@line_width)
+            cairo_context.stroke
+          end
+        end
+      end
     end
   end
 end
+
+Dir[File.expand_path("./#{File.basename(__FILE__, '.rb')}/*.rb", __dir__)].each {|f| require f}

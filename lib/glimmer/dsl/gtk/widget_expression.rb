@@ -67,7 +67,7 @@ module Glimmer
         include ParentExpression
   
         def can_interpret?(parent, keyword, *args, &block)
-          Glimmer::Gtk::WidgetProxy.exists?(keyword)
+          Glimmer::Gtk::WidgetProxy.exist?(keyword)
         end
   
         def interpret(parent, keyword, *args, &block)

@@ -57,28 +57,110 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
-require 'glimmer/dsl/engine'
-Dir[File.expand_path('*_expression.rb', __dir__)].each {|f| require f}
-
-# Glimmer DSL expression configuration module
-#
-# When DSL engine interprets an expression, it attempts to handle
-# with expressions listed here in the order specified.
-
-# Every expression has a corresponding Expression subclass
-# in glimmer/dsl
-
 module Glimmer
-  module DSL
-    module Gtk
-      Engine.add_dynamic_expressions(
-        Gtk,
-        %w[
-          property
-          widget
-          shape
-        ]
-      )
+  module Gtk
+    # Represents Gtk shape objects drawn on area widget, like rectangle, arc, and path
+    class Shape
+      class << self
+        def exist?(keyword)
+          shape_class(keyword)
+        end
+        
+        def create(keyword, parent, args, &block)
+          shape_class(keyword).new(keyword, parent, args, &block)
+        end
+        
+        def shape_class(keyword)
+          descendant_keyword_constant_map[keyword]
+        end
+        
+        def constant_symbol(keyword)
+          keyword.camelcase(:upper).to_sym
+        end
+        
+        def gtk_constant_symbol(keyword)
+          keyword.camelcase(:upper).to_sym
+        end
+        
+        def keyword(constant_symbol)
+          constant_symbol.to_s.underscore
+        end
+        
+        def descendant_keyword_constant_map
+          @descendant_keyword_constant_map ||= map_descendant_keyword_constants_for(self)
+        end
+        
+        def reset_descendant_keyword_constant_map
+          @descendant_keyword_constant_map = nil
+          descendant_keyword_constant_map
+        end
+        
+        def map_descendant_keyword_constants_for(klass, accumulator: {})
+          klass.constants.map do |constant_symbol|
+            [constant_symbol, klass.const_get(constant_symbol)]
+          end.select do |constant_symbol, constant|
+            constant.is_a?(Module) && !accumulator.values.include?(constant)
+          end.each do |constant_symbol, constant|
+            accumulator[keyword(constant_symbol)] = constant
+            map_descendant_keyword_constants_for(constant, accumulator: accumulator)
+          end
+          accumulator
+        end
+      end
+      
+      attr_reader :parent, :args, :keyword, :block
+      attr_accessor :fill, :stroke, :dash, :fill_rule, :font_face, :font_matrix, :font_options, :font_size, :line_cap, :line_join, :line_width, :matrix, :miter_limit, :operator, :scaled_font, :source, :source_color, :source_color_row, :source_gdk_color, :source_gdk_rgba, :source_pixbuf, :source_pixbuf_raw, :source_rgb, :source_rgba, :source_rgba_raw, :source_window, :tolerance
+      # TODO consider automatically setting attribute accessors by looking up set_xyz methods on cairo context
+      
+      def initialize(keyword, parent, args, &block)
+        @keyword = keyword
+        @parent = parent
+        @args = args
+        @block = block
+        post_add_content if @block.nil?
+      end
+      
+      # Subclasses may override to perform post add_content work (normally must call super)
+      def post_add_content
+        @parent&.post_initialize_child(self)
+      end
+      
+      # Subclasses may override to perform post initialization work on an added child (normally must also call super)
+      def post_initialize_child(child)
+        # No Op for now. In the future, if we support relative-positioning nesting of shapes, this can be used/overridden
+      end
+      
+      def window_proxy
+        @parent&.window_proxy
+      end
+
+      def content(&block)
+        Glimmer::DSL::Engine.add_content(self, Glimmer::DSL::Gtk::ShapeExpression.new, @keyword, &block)
+      end
+      
+      # Subclasses must implement
+      def draw(drawing_area_widget, cairo_context)
+        # No Op
+      end
+      
+      def respond_to?(method_name, include_private = false, &block)
+        method_name = method_name.to_s
+        (method_name.start_with?('set_') && super("#{method_name.sub('set_', '')}=", include_private)) ||
+          super(method_name, include_private)
+      end
+      
+      def method_missing(method_name, *args, &block)
+        method_name = method_name.to_s
+        if (method_name.start_with?('set_') && respond_to?("#{method_name.sub('set_', '')}=", true))
+          args = [args] if args.size > 1
+          send("#{method_name.sub('set_', '')}=", *args, &block)
+        else
+          super
+        end
+      end
+      
     end
   end
 end
+
+Dir[File.expand_path("./#{File.basename(__FILE__, '.rb')}/*.rb", __dir__)].each {|f| require f}

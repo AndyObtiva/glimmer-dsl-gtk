@@ -57,28 +57,30 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
-require 'glimmer/dsl/engine'
-Dir[File.expand_path('*_expression.rb', __dir__)].each {|f| require f}
-
-# Glimmer DSL expression configuration module
-#
-# When DSL engine interprets an expression, it attempts to handle
-# with expressions listed here in the order specified.
-
-# Every expression has a corresponding Expression subclass
-# in glimmer/dsl
+require 'glimmer/dsl/expression'
+require 'glimmer/dsl/parent_expression'
 
 module Glimmer
   module DSL
     module Gtk
-      Engine.add_dynamic_expressions(
-        Gtk,
-        %w[
-          property
-          widget
-          shape
-        ]
-      )
+      class ShapeExpression < Expression
+        include ParentExpression
+  
+        def can_interpret?(parent, keyword, *args, &block)
+          Glimmer::Gtk::Shape.exist?(keyword)
+        end
+  
+        def interpret(parent, keyword, *args, &block)
+          Glimmer::Gtk::Shape.create(keyword, parent, args, &block)
+        end
+        
+        def add_content(parent, keyword, *args, &block)
+          super
+          parent.post_add_content
+        end
+      end
     end
   end
 end
+
+require 'glimmer/gtk/shape'
