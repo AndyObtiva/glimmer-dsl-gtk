@@ -4,10 +4,10 @@ include Glimmer
 
 window {
   title 'Hello, World!'
-  default_size 360, 260
+  default_size 400, 400
   
   drawing_area {
-    rectangle(0, 0, 360, 260) {
+    rectangle(0, 0, 400, 400) {
       fill 255, 255, 255
     }
     
@@ -17,7 +17,13 @@ window {
       stroke 0, 128, 255
     }
 
-    arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30) {
+    arc(85, 285, 45, (Math::PI/180)*100, -(Math::PI/180)*30) {
+      fill 255, 0, 0
+      stroke 0, 128, 255
+      line_width 3
+    }
+    
+    circle(85, 185, 45) {
       fill 255, 0, 0
       stroke 0, 128, 255
       line_width 3
@@ -30,6 +36,12 @@ window {
     }
     
     rounded_rectangle(140, 140, 180, 90, 30, 20) {
+      fill 255, 255, 0
+      stroke 255, 0, 0
+      line_width 3
+    }
+
+    triangle(140, 240, 320, 240, 230, 330) {
       fill 255, 255, 0
       stroke 255, 0, 0
       line_width 3
