@@ -61,7 +61,7 @@ module Glimmer
   module Gtk
     # Represents Gtk shape objects drawn on area widget, like rectangle, arc, and path
     class Shape
-      class RoundedRectangle < Shape
+      class Arc < Shape
       end
     end
   end

@@ -62,9 +62,6 @@ module Glimmer
     # Represents Gtk shape objects drawn on area widget, like rectangle, arc, and path
     class Shape
       class Rectangle < Shape
-        def draw_shape(drawing_area_widget, cairo_context)
-          cairo_context.rectangle(*args)
-        end
       end
     end
   end

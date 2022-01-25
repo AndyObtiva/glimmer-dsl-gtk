@@ -78,10 +78,6 @@ module Glimmer
           keyword.camelcase(:upper).to_sym
         end
         
-        def gtk_constant_symbol(keyword)
-          keyword.camelcase(:upper).to_sym
-        end
-        
         def keyword(constant_symbol)
           constant_symbol.to_s.underscore
         end
@@ -151,9 +147,14 @@ module Glimmer
         end
       end
       
-      # Subclasses must implement
+      # Invokes cairo_context#underscored_shape_class_name method by default
+      # e.g. cairo_context.rectangle(0, 0, 200, 100) for Glimmer::Gtk::Shape::Rectangle (`rectangle` keyword)
+      #
+      # Subclasses can override
       def draw_shape(drawing_area_widget, cairo_context)
-        # no op
+        class_symbol = self.class.name.split('::').last
+        keyword = self.class.keyword(class_symbol)
+        cairo_context.send(keyword, *args)
       end
       
       def draw_fill(drawing_area_widget, cairo_context)
@@ -187,7 +188,7 @@ module Glimmer
           args = [args] if args.size > 1
           send("#{method_name.sub('set_', '')}=", *args, &block)
         else
-          super
+          super(method_name.to_sym, *args, &block)
         end
       end
     end
