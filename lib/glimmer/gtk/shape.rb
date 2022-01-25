@@ -138,9 +138,41 @@ module Glimmer
         Glimmer::DSL::Engine.add_content(self, Glimmer::DSL::Gtk::ShapeExpression.new, @keyword, &block)
       end
       
-      # Subclasses must implement
+      # Subclasses must either implement draw_shape hook method or override this method directly
       def draw(drawing_area_widget, cairo_context)
-        # No Op
+        if fill
+          draw_shape(drawing_area_widget, cairo_context)
+          draw_fill(drawing_area_widget, cairo_context)
+        end
+        
+        if stroke
+          draw_shape(drawing_area_widget, cairo_context)
+          draw_stroke(drawing_area_widget, cairo_context)
+        end
+      end
+      
+      # Subclasses must implement
+      def draw_shape(drawing_area_widget, cairo_context)
+        # no op
+      end
+      
+      def draw_fill(drawing_area_widget, cairo_context)
+        if fill.size == 3
+          cairo_context.set_source_rgb(*fill)
+        elsif fill.size == 4
+          cairo_context.set_source_rgba(*fill)
+        end
+        cairo_context.fill
+      end
+      
+      def draw_stroke(drawing_area_widget, cairo_context)
+        if stroke.size == 3
+          cairo_context.set_source_rgb(*stroke)
+        elsif stroke.size == 4
+          cairo_context.set_source_rgba(*stroke)
+        end
+        cairo_context.set_line_width(line_width)
+        cairo_context.stroke
       end
       
       def respond_to?(method_name, include_private = false, &block)
@@ -158,7 +190,6 @@ module Glimmer
           super
         end
       end
-      
     end
   end
 end
