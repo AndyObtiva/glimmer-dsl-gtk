@@ -11,19 +11,19 @@ window {
       fill 255, 255, 255
     }
     
-    arc(85, 85, 45, (Math::PI/180)*100, -(Math::PI/180)*30) {
-      line_width 3
+    arc(85, 85, 45, (Math::PI/180)*100, -(Math::PI/180)*100) {
       fill 255, 0, 0
       stroke 0, 128, 255
+      line_width 3
     }
 
-    arc(85, 285, 45, (Math::PI/180)*100, -(Math::PI/180)*30) {
+    arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30) {
       fill 255, 0, 0
       stroke 0, 128, 255
       line_width 3
     }
     
-    circle(85, 185, 45) {
+    circle(85, 285, 45) {
       fill 255, 0, 0
       stroke 0, 128, 255
       line_width 3
@@ -67,6 +67,12 @@ window {
       line_to 180, 170
       close_path
 
+      fill 0, 255, 0
+      stroke 0, 0, 255
+      line_width 3
+    }
+    
+    polygon(200, 260, 270, 270, 250, 290, 220, 290, 200, 280, 180, 270) {
       fill 0, 255, 0
       stroke 0, 0, 255
       line_width 3
