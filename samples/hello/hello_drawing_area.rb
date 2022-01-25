@@ -29,12 +29,12 @@ window {
       line_width 3
     }
     
-#     rounded_rectangle(140, 40, 180, 90, 30, 20) {
-#       fill 255, 255, 0
-#       stroke 255, 0, 0
-#       line_width 3
-#     }
-#
+    rounded_rectangle(140, 140, 180, 90, 30, 20) {
+      fill 255, 255, 0
+      stroke 255, 0, 0
+      line_width 3
+    }
+
 #     path {
 #       move_to 160, 100
 #       curve_to 190, 60, 200, 80, 210, 70
