@@ -67,7 +67,7 @@ module Glimmer
         def can_interpret?(parent, keyword, *args, &block)
           (parent.is_a?(Glimmer::Gtk::WidgetProxy) || parent.is_a?(Glimmer::Gtk::Shape)) and
             block.nil? and
-            parent.respond_to?(keyword)
+            parent.respond_to?("set_#{keyword}")
         end
   
         def interpret(parent, keyword, *args, &block)

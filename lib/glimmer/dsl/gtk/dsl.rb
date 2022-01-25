@@ -75,6 +75,7 @@ module Glimmer
         Gtk,
         %w[
           property
+          operation
           widget
           shape
         ]

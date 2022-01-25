@@ -57,51 +57,21 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
+require 'glimmer/dsl/expression'
+require 'glimmer/gtk/widget_proxy'
+
 module Glimmer
-  module Gtk
-    class Shape
-      # Represents Gtk paths consisting of operations: move_to, line_to, curve_to, rel_move_to, rel_line_to, rel_curve_to, and close_path
-      class Path < Shape
-        attr_reader :drawing_operations
-      
-        def initialize(keyword, parent, args, &block)
-          super
-          @drawing_operations = []
+  module DSL
+    module Gtk
+      class OperationExpression < Expression
+        def can_interpret?(parent, keyword, *args, &block)
+          (parent.is_a?(Glimmer::Gtk::WidgetProxy) || parent.is_a?(Glimmer::Gtk::Shape)) and
+            block.nil? and
+            parent.respond_to?(keyword)
         end
-        
-        def draw_shape(drawing_area_widget, cairo_context)
-          cairo_context.new_path
-          @drawing_operations.each do |drawing_operation_details|
-            cairo_context.send(drawing_operation_details[0], *drawing_operation_details[1])
-          end
-        end
-      
-        def move_to(*args)
-          @drawing_operations << [:move_to, args]
-        end
-      
-        def line_to(*args)
-          @drawing_operations << [:line_to, args]
-        end
-      
-        def curve_to(*args)
-          @drawing_operations << [:curve_to, args]
-        end
-      
-        def rel_move_to(*args)
-          @drawing_operations << [:rel_move_to, args]
-        end
-      
-        def rel_line_to(*args)
-          @drawing_operations << [:rel_line_to, args]
-        end
-      
-        def rel_curve_to(*args)
-          @drawing_operations << [:rel_curve_to, args]
-        end
-      
-        def close_path
-          @drawing_operations << [:close_path]
+  
+        def interpret(parent, keyword, *args, &block)
+          parent.send(keyword, *args)
         end
       end
     end
