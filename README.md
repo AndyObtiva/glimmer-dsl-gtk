@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.2
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.3
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -30,7 +30,7 @@ Linux | Mac | Windows
 ------|-----|--------
 ![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-linux-hello-world.png) | ![hello world screenshot Mac](/screenshots/glimmer-dsl-gtk-mac-hello-world.png) | ![hello world screenshot Windows](/screenshots/glimmer-dsl-gtk-windows-hello-world.png)
 
-NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). If you want it developed faster, then [open an issue report](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues/new). I have completed some GitHub project features much faster before due to [issue reports](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues) and [pull requests](https://github.com/AndyObtiva/glimmer-dsl-gtk/pulls). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better. Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
+NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). If you want it developed faster, then [open an issue report](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues/new). I have completed some GitHub project features much faster before due to [issue reports](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues) and [pull requests](https://github.com/AndyObtiva/glimmer-dsl-gtk/pulls). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
 
 Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interested in:
 - [glimmer-dsl-swt](https://github.com/AndyObtiva/glimmer-dsl-swt): Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)
@@ -79,7 +79,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.2'
+gem 'glimmer-dsl-gtk', '~> 0.0.3'
 ```
 
 And, then run:
@@ -134,6 +134,18 @@ SomeGlimmerApplication.new.launch
 - Content: widget keywords can have a block of content that could contain nested widget keywords, properties, and signals. The block can optionally receive one argument representing the widget (e.g. `window {|w| ... }`):
   - Properties: All GTK widget properties can be set via lowercase underscored names (without the 'set_' prefix) nested under widget keywords (e.g. `window {title 'Hello, World'}` sets `title` property of `window`)
   - Signals: All GTK signals can be wired with `on(signal) { ... }` syntax (e.g. `on(:activate) { do_something }`)
+
+#### MVC Observer Pattern
+
+In Smalltalk-MVC ([Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) Architectural Pattern), the View is an active View that observes the Model for changes and updates itself.
+
+![MVC](http://3.bp.blogspot.com/-4eW59Ao0ess/ToiBzAiYdZI/AAAAAAAAAOg/SiYa6XHwBFE/s320/Screen+shot+2011-10-02+at+10.22.11+AM.png)
+
+This can be achieved with the Glimmer GUI DSL using the `observe` keyword, which takes a model (any object, including `self`) and attribute Symbol or String expression (e.g. `:count` or `'address.street'`).
+
+The model is automatically enhanced as an `Glimmer::DataBinding::ObservableModel` / `Glimmer::DataBinding::ObservableHash` / `Glimmer::DataBinding::ObservableArray` depending on its type to support notifying observers of attribute changes (when performed using the attribute writer, which automatically calls added method `notify_observers(attribute)`)
+
+Note that it is usually recommended to observe external model objects (not `self`), but `self` is OK in very simple cases or presentation-related attributes only.
 
 ## Girb (Glimmer IRB)
 
@@ -777,6 +789,198 @@ application('org.glimmer.hello-application') {
     }.present
   end
 }.run
+```
+
+#### Tetris
+
+[samples/elaborate/tetris.rb](/samples/elaborate/tetris.rb)
+
+Linux | Mac | Windows
+------|-----|--------
+![tetris](/screenshots/glimmer-dsl-gtk-linux-tetris.png) | ![tetris](/screenshots/glimmer-dsl-gtk-mac-tetris.png) | ![tetris](/screenshots/glimmer-dsl-gtk-windows-tetris.png)
+
+Run (via installed gem):
+
+```
+ruby -r glimmer-dsl-gtk -e "require 'samples/elaborate/tetris'"
+```
+
+Run (via locally cloned project):
+
+```
+ruby -r ./lib/glimmer-dsl-gtk.rb samples/elaborate/tetris.rb
+```
+
+Code:
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+require_relative 'tetris/model/game'
+
+class Tetris
+  include Glimmer
+  
+  BLOCK_SIZE = 25
+  BEVEL_CONSTANT = 20
+  COLOR_GRAY = [192, 192, 192]
+    
+  def initialize
+    @game = Model::Game.new
+  end
+  
+  def launch
+    create_gui
+    register_observers
+    @game.start!
+    @main_window.show
+  end
+  
+  def create_gui
+    @main_window = window {
+      title 'Glimmer Tetris'
+      default_size Model::Game::PLAYFIELD_WIDTH * BLOCK_SIZE, Model::Game::PLAYFIELD_HEIGHT * BLOCK_SIZE # + 98
+      
+      box(:vertical) {
+        @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
+      }
+      
+      on(:key_press_event) do |widget, key_event|
+        case key_event.keyval
+        when 65364 # down arrow
+          @game.down!
+        when 32 # space
+          @game.down!(instant: true)
+        when 65362 # up arrow
+          case @game.up_arrow_action
+          when :instant_down
+            @game.down!(instant: true)
+          when :rotate_right
+            @game.rotate!(:right)
+          when :rotate_left
+            @game.rotate!(:left)
+          end
+        when 65361 # left arrow
+          @game.left!
+        when 65363 # right arrow
+          @game.right!
+        when 65506 # right shift
+          @game.rotate!(:right)
+        when 65505 # left shift
+          @game.rotate!(:left)
+        else
+          # Do Nothing
+        end
+      end
+    }
+  end
+  
+  def register_observers
+    observe(@game, :game_over) do |game_over|
+      if game_over
+        show_game_over_dialog
+      else
+        start_moving_tetrominos_down
+      end
+    end
+    
+    @game.playfield_height.times do |row|
+      @game.playfield_width.times do |column|
+        observe(@game.playfield[row][column], :color) do |new_color|
+          color = new_color
+          block = @playfield_blocks[row][column]
+          block[:background_square].fill = color
+          block[:top_bevel_edge].fill = [color[0] + 4*BEVEL_CONSTANT, color[1] + 4*BEVEL_CONSTANT, color[2] + 4*BEVEL_CONSTANT]
+          block[:right_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:bottom_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:left_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : color
+          block[:drawing_area].queue_draw
+          false
+        end
+      end
+    end
+  end
+  
+  def playfield(playfield_width: , playfield_height: , block_size: , &extra_content)
+    blocks = []
+    box(:vertical) {
+      playfield_height.times.map do |row|
+        blocks << []
+        box(:horizontal) {
+          playfield_width.times.map do |column|
+            blocks.last << block(row: row, column: column, block_size: block_size)
+          end
+        }
+      end
+      
+      extra_content&.call
+    }
+    blocks
+  end
+  
+  def block(row: , column: , block_size: , &extra_content)
+    block = {}
+    bevel_pixel_size = 0.16 * block_size.to_f
+    color = Model::Block::COLOR_CLEAR
+    block[:drawing_area] = drawing_area {
+      size_request block_size, block_size
+      
+      block[:background_square] = square(0, 0, block_size) {
+        fill *color
+      }
+      
+      block[:top_bevel_edge] = polygon(0, 0, block_size, 0, block_size - bevel_pixel_size, bevel_pixel_size, bevel_pixel_size, bevel_pixel_size) {
+        fill color[0] + 4*BEVEL_CONSTANT, color[1] + 4*BEVEL_CONSTANT, color[2] + 4*BEVEL_CONSTANT
+      }
+       
+      block[:right_bevel_edge] = polygon(block_size, 0, block_size - bevel_pixel_size, bevel_pixel_size, block_size - bevel_pixel_size, block_size - bevel_pixel_size, block_size, block_size) {
+        fill color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT
+      }
+       
+      block[:bottom_bevel_edge] = polygon(block_size, block_size, 0, block_size, bevel_pixel_size, block_size - bevel_pixel_size, block_size - bevel_pixel_size, block_size - bevel_pixel_size) {
+        fill color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT
+      }
+      
+      block[:left_bevel_edge] = polygon(0, 0, 0, block_size, bevel_pixel_size, block_size - bevel_pixel_size, bevel_pixel_size, bevel_pixel_size) {
+        fill color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT
+      }
+      
+      block[:border_square] = square(0, 0, block_size) {
+        stroke *COLOR_GRAY
+      }
+      
+      extra_content&.call
+    }
+    block
+  end
+  
+  def start_moving_tetrominos_down
+    unless @tetrominos_start_moving_down
+      @tetrominos_start_moving_down = true
+      GLib::Timeout.add(@game.delay*1000) do
+        @game.down! if !@game.game_over? && !@game.paused?
+        true
+      end
+    end
+  end
+  
+  def show_game_over_dialog
+    message_dialog(@main_window) { |md|
+      title 'Game Over!'
+      text "Score: #{@game.high_scores.first.score}\nLines: #{@game.high_scores.first.lines}\nLevel: #{@game.high_scores.first.level}"
+      
+      on(:response) do
+        md.destroy
+      end
+    }.show
+    
+    @game.restart!
+    false
+  end
+end
+
+Tetris.new.launch
 ```
 
 ## Resources

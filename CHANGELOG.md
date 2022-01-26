@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.0.3
+
+- samples/elaborate/tetris.rb (basic Tetris implementation)
+- `observe` keyword for observing Model attributes to update the View
+- Ensure `fill`/`stroke` properties in `drawin_area` shapes accept 255-based rgb colors (or rgba with 1-based transparency)
+- Support setting all cairo shape attributes (e.g. `line_width`, `line_cap`, etc...) with declarative syntax (whichever is specified)
+- Upgrade to glimmer 2.6.0
+
 ## 0.0.2
 
 - Support re-opening any widget proxy content with `#content {}` block to add more nested widgets inside
