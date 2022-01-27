@@ -61,6 +61,7 @@ sudo apt install -y -V libgirepository1.0-dev
 On the Mac, make sure to:
 - Have [Homebrew](https://brew.sh/) installed
 - Run this [Homebrew](https://brew.sh/) command to have GTK display GUI icons: `brew install adwaita-icon-theme`
+- (Optional) You can upgrade your GTK3/GTK4/GTK+ by running: `brew install gtk+3` / `brew install gtk+4` / `brew install gtk+`
 
 ### Windows
 

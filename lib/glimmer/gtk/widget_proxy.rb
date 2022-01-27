@@ -147,8 +147,8 @@ module Glimmer
       
       # Subclasses may override to perform post initialization work on an added child (normally must also call super)
       def post_initialize_child(child)
-        @gtk.add(child.gtk)
-        child.gtk.show
+        @gtk.add(child.gtk) if @gtk.respond_to?(:add)
+        child.gtk&.show if child.gtk&.respond_to?(:show)
       end
       
       def window_proxy
