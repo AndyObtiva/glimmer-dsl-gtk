@@ -114,6 +114,23 @@ class Tetris
         }
         mi.submenu = m.gtk
       }
+      
+      menu_item(label: 'View') { |mi|
+        m = menu {
+          menu_item(label: 'Show High Scores') {
+            on(:activate) do
+              show_high_scores
+            end
+          }
+          
+          menu_item(label: 'Clear High Scores') {
+            on(:activate) do
+              @game.clear_high_scores!
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
     }
   end
   
@@ -192,6 +209,30 @@ class Tetris
     
     @game.restart!
     false
+  end
+  
+  def show_high_scores
+    game_paused = !!@game.paused
+    @game.paused = true
+    
+    if @game.high_scores.empty?
+      high_scores_string = "No games have been scored yet."
+    else
+      high_scores_string = @game.high_scores.map do |high_score|
+        "#{high_score.name} | Score: #{high_score.score} | Lines: #{high_score.lines} | Level: #{high_score.level}"
+      end.join("\n")
+    end
+    
+    message_dialog(@main_window) { |md|
+      title 'High Scores'
+      text high_scores_string
+      
+      on(:response) do
+        md.destroy
+      end
+    }.show
+    
+    @game.paused = game_paused
   end
 end
 
