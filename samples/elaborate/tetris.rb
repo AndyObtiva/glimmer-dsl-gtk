@@ -26,6 +26,8 @@ class Tetris
       default_size Model::Game::PLAYFIELD_WIDTH * BLOCK_SIZE, Model::Game::PLAYFIELD_HEIGHT * BLOCK_SIZE # + 98
       
       box(:vertical) {
+        tetris_menu_bar
+        
         @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
       }
       
@@ -84,6 +86,35 @@ class Tetris
         end
       end
     end
+  end
+  
+  def tetris_menu_bar
+    menu_bar {
+      menu_item(label: 'Game') { |mi|
+        m = menu {
+          check_menu_item(label: 'Pause') {
+            on(:activate) do
+              @game.paused = !@game.paused?
+            end
+          }
+          
+          menu_item(label: 'Restart') {
+            on(:activate) do
+              @game.restart!
+            end
+          }
+          
+          separator_menu_item
+          
+          menu_item(label: 'Exit') {
+            on(:activate) do
+              @main_window.close
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
+    }
   end
   
   def playfield(playfield_width: , playfield_height: , block_size: , &extra_content)
