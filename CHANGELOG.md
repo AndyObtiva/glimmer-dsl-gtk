@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.0.4
+
+- Tetris Menu Bar
+- Tetris Score Board
+- Tetris Next Tetromino Preview
+
 ## 0.0.3
 
 - samples/elaborate/tetris.rb (basic Tetris implementation)

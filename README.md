@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.3
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.4
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -80,7 +80,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.3'
+gem 'glimmer-dsl-gtk', '~> 0.0.4'
 ```
 
 And, then run:
@@ -843,7 +843,14 @@ class Tetris
       default_size Model::Game::PLAYFIELD_WIDTH * BLOCK_SIZE, Model::Game::PLAYFIELD_HEIGHT * BLOCK_SIZE # + 98
       
       box(:vertical) {
-        @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
+        tetris_menu_bar
+
+        box(:horizontal) {
+          @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
+          
+          score_board
+        }
+        
       }
       
       on(:key_press_event) do |widget, key_event|
@@ -901,6 +908,135 @@ class Tetris
         end
       end
     end
+    
+    Model::Game::PREVIEW_PLAYFIELD_HEIGHT.times do |row|
+      Model::Game::PREVIEW_PLAYFIELD_WIDTH.times do |column|
+        observe(@game.preview_playfield[row][column], :color) do |new_color|
+          color = new_color
+          block = @preview_playfield_blocks[row][column]
+          block[:background_square].fill = color
+          block[:top_bevel_edge].fill = [color[0] + 4*BEVEL_CONSTANT, color[1] + 4*BEVEL_CONSTANT, color[2] + 4*BEVEL_CONSTANT]
+          block[:right_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:bottom_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:left_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : color
+          block[:drawing_area].queue_draw
+        end
+      end
+    end
+    
+    observe(@game, :score) do |new_score|
+      @score_label.text = new_score.to_s
+    end
+
+    observe(@game, :lines) do |new_lines|
+      @lines_label.text = new_lines.to_s
+    end
+
+    observe(@game, :level) do |new_level|
+      @level_label.text = new_level.to_s
+    end
+  end
+  
+  def tetris_menu_bar
+    menu_bar {
+      menu_item(label: 'Game') { |mi|
+        m = menu {
+          check_menu_item(label: 'Pause') {
+            on(:activate) do
+              @game.paused = !@game.paused?
+            end
+          }
+          
+          menu_item(label: 'Restart') {
+            on(:activate) do
+              @game.restart!
+            end
+          }
+          
+          separator_menu_item
+          
+          menu_item(label: 'Exit') {
+            on(:activate) do
+              @main_window.close
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
+      
+      menu_item(label: 'View') { |mi|
+        m = menu {
+          menu_item(label: 'Show High Scores') {
+            on(:activate) do
+              show_high_score_dialog
+            end
+          }
+          
+          menu_item(label: 'Clear High Scores') {
+            on(:activate) do
+              @game.clear_high_scores!
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
+      
+      menu_item(label: 'Options') { |mi|
+        m = menu {
+          rmi = radio_menu_item(nil, 'Instant Down on Up') {
+            on(:activate) do
+              @game.instant_down_on_up!
+            end
+          }
+          
+          default_rmi = radio_menu_item(rmi.group, 'Rotate Right on Up') {
+            on(:activate) do
+              @game.rotate_right_on_up!
+            end
+          }
+          default_rmi.activate
+          
+          radio_menu_item(rmi.group, 'Rotate Left on Up') {
+            on(:activate) do
+              @game.rotate_left_on_up!
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
+      
+      menu_item(label: 'Options') { |mi|
+        m = menu {
+          menu_item(label: 'About') {
+            on(:activate) do
+              show_about_dialog
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
+    }
+  end
+  
+  def score_board
+    box(:vertical) {
+      label
+      @preview_playfield_blocks = playfield(playfield_width: Model::Game::PREVIEW_PLAYFIELD_WIDTH, playfield_height: Model::Game::PREVIEW_PLAYFIELD_HEIGHT, block_size: BLOCK_SIZE)
+      
+      label
+      label('Score')
+      @score_label = label
+
+      label
+      label('Lines')
+      @lines_label = label
+
+      label
+      label('Level')
+      @level_label = label
+      label
+    }
   end
   
   def playfield(playfield_width: , playfield_height: , block_size: , &extra_content)
@@ -978,6 +1114,41 @@ class Tetris
     
     @game.restart!
     false
+  end
+  
+  def show_high_score_dialog
+    game_paused = !!@game.paused
+    @game.paused = true
+    
+    if @game.high_scores.empty?
+      high_scores_string = "No games have been scored yet."
+    else
+      high_scores_string = @game.high_scores.map do |high_score|
+        "#{high_score.name} | Score: #{high_score.score} | Lines: #{high_score.lines} | Level: #{high_score.level}"
+      end.join("\n")
+    end
+    
+    message_dialog(@main_window) { |md|
+      title 'High Scores'
+      text high_scores_string
+      
+      on(:response) do
+        md.destroy
+      end
+    }.show
+    
+    @game.paused = game_paused
+  end
+  
+  def show_about_dialog
+    message_dialog(@main_window) { |md|
+      title 'About'
+      text "Glimmer Tetris\n\nGlimmer DSL for GTK\n\nElaborate Sample\n\nCopyright (c) 2021-2022 Andy Maleh"
+      
+      on(:response) do
+        md.destroy
+      end
+    }.show
   end
 end
 
