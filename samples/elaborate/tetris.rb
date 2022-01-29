@@ -27,10 +27,13 @@ class Tetris
       
       box(:vertical) {
         tetris_menu_bar
+
+        box(:horizontal) {
+          @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
+          
+          score_board
+        }
         
-        score_board
-        
-        @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
       }
       
       on(:key_press_event) do |widget, key_event|
@@ -85,6 +88,22 @@ class Tetris
           block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : color
           block[:drawing_area].queue_draw
           false
+        end
+      end
+    end
+    
+    Model::Game::PREVIEW_PLAYFIELD_HEIGHT.times do |row|
+      Model::Game::PREVIEW_PLAYFIELD_WIDTH.times do |column|
+        observe(@game.preview_playfield[row][column], :color) do |new_color|
+          color = new_color
+          block = @preview_playfield_blocks[row][column]
+          block[:background_square].fill = color
+          block[:top_bevel_edge].fill = [color[0] + 4*BEVEL_CONSTANT, color[1] + 4*BEVEL_CONSTANT, color[2] + 4*BEVEL_CONSTANT]
+          block[:right_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:bottom_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:left_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
+          block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : color
+          block[:drawing_area].queue_draw
         end
       end
     end
@@ -185,6 +204,9 @@ class Tetris
   
   def score_board
     box(:vertical) {
+      label
+      @preview_playfield_blocks = playfield(playfield_width: Model::Game::PREVIEW_PLAYFIELD_WIDTH, playfield_height: Model::Game::PREVIEW_PLAYFIELD_HEIGHT, block_size: BLOCK_SIZE)
+      
       label
       label('Score')
       @score_label = label
