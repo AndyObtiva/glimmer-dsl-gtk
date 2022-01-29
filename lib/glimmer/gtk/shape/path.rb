@@ -75,6 +75,10 @@ module Glimmer
             cairo_context.send(drawing_operation_details[0], *drawing_operation_details[1])
           end
         end
+        
+        def arc(*args)
+          @drawing_operations << [:arc, args]
+        end
       
         def move_to(*args)
           @drawing_operations << [:move_to, args]

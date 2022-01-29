@@ -136,7 +136,7 @@ SomeGlimmerApplication.new.launch
   - Properties: All GTK widget properties can be set via lowercase underscored names (without the 'set_' prefix) nested under widget keywords (e.g. `window {title 'Hello, World'}` sets `title` property of `window`)
   - Signals: All GTK signals can be wired with `on(signal) { ... }` syntax (e.g. `on(:activate) { do_something }`)
 
-#### MVC Observer Pattern
+### MVC Observer Pattern
 
 In Smalltalk-MVC ([Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) Architectural Pattern), the View is an active View that observes the Model for changes and updates itself.
 
@@ -147,6 +147,62 @@ This can be achieved with the Glimmer GUI DSL using the `observe` keyword, which
 The model is automatically enhanced as an `Glimmer::DataBinding::ObservableModel` / `Glimmer::DataBinding::ObservableHash` / `Glimmer::DataBinding::ObservableArray` depending on its type to support notifying observers of attribute changes (when performed using the attribute writer, which automatically calls added method `notify_observers(attribute)`)
 
 Note that it is usually recommended to observe external model objects (not `self`), but `self` is OK in very simple cases or presentation-related attributes only.
+
+### Declarative Cairo Shapes
+
+Cairo is the engine behind drawing arbitrary 2D geometric shapes in GTK.
+
+In Glimmer DSL for GTK, you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed.
+
+Here is a quick tutorial consisting of samples inspired and ported from Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"
+
+### Arc
+
+Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Hello, Drawing Area!'
+  default_size 256, 256
+  
+  drawing_area {
+    # Set up the parameters
+    xc = 128.0
+    yc = 128.0
+    radius = 100.0
+    angle1 = 45.0  * (Math::PI/180.0) # angles are specified
+    angle2 = 180.0  * (Math::PI/180.0) # in radians
+    
+    # The main arc
+    arc(xc, yc, radius, angle1, angle2) {
+      stroke 0, 0, 0
+      line_width 10
+    }
+    
+    # Draw helping lines
+    
+    # First, the circle at the centre
+    arc(xc, yc, 10.0, 0, 2*Math::PI) {
+      fill 255, 51, 51, 0.6
+    }
+    
+    # Then, the lines reaching out
+    path {
+      arc xc, yc, radius, angle1, angle1
+      line_to xc, yc
+      arc xc, yc, radius, angle2, angle2
+      line_to xc, yc
+      
+      stroke 255, 51, 51, 0.6
+      line_width 6
+    }
+  }
+}.show
+```
 
 ## Girb (Glimmer IRB)
 

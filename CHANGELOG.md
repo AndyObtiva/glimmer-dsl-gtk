@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.5
+
+- Support `arc` as an operation inside `path` in Cairo declarative shape syntax
+
 ## 0.0.4
 
 - Tetris Menu Bar
