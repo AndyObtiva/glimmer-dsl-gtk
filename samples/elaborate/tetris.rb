@@ -28,6 +28,8 @@ class Tetris
       box(:vertical) {
         tetris_menu_bar
         
+        score_board
+        
         @playfield_blocks = playfield(playfield_width: @game.playfield_width, playfield_height: @game.playfield_height, block_size: BLOCK_SIZE)
       }
       
@@ -85,6 +87,18 @@ class Tetris
           false
         end
       end
+    end
+    
+    observe(@game, :score) do |new_score|
+      @score_label.text = new_score.to_s
+    end
+
+    observe(@game, :lines) do |new_lines|
+      @lines_label.text = new_lines.to_s
+    end
+
+    observe(@game, :level) do |new_level|
+      @level_label.text = new_level.to_s
     end
   end
   
@@ -166,6 +180,23 @@ class Tetris
         }
         mi.submenu = m.gtk
       }
+    }
+  end
+  
+  def score_board
+    box(:vertical) {
+      label
+      label('Score')
+      @score_label = label
+
+      label
+      label('Lines')
+      @lines_label = label
+
+      label
+      label('Level')
+      @level_label = label
+      label
     }
   end
   
