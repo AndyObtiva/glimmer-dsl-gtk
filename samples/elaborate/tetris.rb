@@ -119,7 +119,7 @@ class Tetris
         m = menu {
           menu_item(label: 'Show High Scores') {
             on(:activate) do
-              show_high_scores
+              show_high_score_dialog
             end
           }
           
@@ -150,6 +150,17 @@ class Tetris
           radio_menu_item(rmi.group, 'Rotate Left on Up') {
             on(:activate) do
               @game.rotate_left_on_up!
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
+      
+      menu_item(label: 'Options') { |mi|
+        m = menu {
+          menu_item(label: 'About') {
+            on(:activate) do
+              show_about_dialog
             end
           }
         }
@@ -235,7 +246,7 @@ class Tetris
     false
   end
   
-  def show_high_scores
+  def show_high_score_dialog
     game_paused = !!@game.paused
     @game.paused = true
     
@@ -257,6 +268,17 @@ class Tetris
     }.show
     
     @game.paused = game_paused
+  end
+  
+  def show_about_dialog
+    message_dialog(@main_window) { |md|
+      title 'About'
+      text "Glimmer Tetris\n\nGlimmer DSL for GTK\n\nElaborate Sample\n\nCopyright (c) 2021-2022 Andy Maleh"
+      
+      on(:response) do
+        md.destroy
+      end
+    }.show
   end
 end
 
