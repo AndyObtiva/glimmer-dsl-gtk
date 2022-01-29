@@ -131,6 +131,30 @@ class Tetris
         }
         mi.submenu = m.gtk
       }
+      
+      menu_item(label: 'Options') { |mi|
+        m = menu {
+          rmi = radio_menu_item(nil, 'Instant Down on Up') {
+            on(:activate) do
+              @game.instant_down_on_up!
+            end
+          }
+          
+          default_rmi = radio_menu_item(rmi.group, 'Rotate Right on Up') {
+            on(:activate) do
+              @game.rotate_right_on_up!
+            end
+          }
+          default_rmi.activate
+          
+          radio_menu_item(rmi.group, 'Rotate Left on Up') {
+            on(:activate) do
+              @game.rotate_left_on_up!
+            end
+          }
+        }
+        mi.submenu = m.gtk
+      }
     }
   end
   

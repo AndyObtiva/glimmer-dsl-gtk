@@ -215,6 +215,10 @@ class Tetris
         self.up_arrow_action == :instant_down
       end
       
+      def instant_down_on_up!
+        self.up_arrow_action = :instant_down
+      end
+      
       def rotate_right_on_up=(value)
         self.up_arrow_action = :rotate_right if value
       end
@@ -223,12 +227,20 @@ class Tetris
         self.up_arrow_action == :rotate_right
       end
       
+      def rotate_right_on_up!
+        self.up_arrow_action = :rotate_right
+      end
+      
       def rotate_left_on_up=(value)
         self.up_arrow_action = :rotate_left if value
       end
       
       def rotate_left_on_up
         self.up_arrow_action == :rotate_left
+      end
+      
+      def rotate_left_on_up!
+        self.up_arrow_action = :rotate_left
       end
       
       def reset_tetrominoes
