@@ -113,7 +113,7 @@ module Glimmer
       SHAPE_GENERAL_PROPERTIES = [:matrix, :operator, :tolerance]
       
       attr_reader :parent, :args, :keyword, :block
-      attr_accessor :fill, :stroke
+      attr_accessor :fill, :stroke, :clip
       attr_accessor *(SHAPE_FILL_PROPERTIES + SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES)
       # TODO consider automatically setting attribute accessors by looking up set_xyz methods on cairo context
       
@@ -154,6 +154,11 @@ module Glimmer
           draw_shape(drawing_area_widget, cairo_context)
           draw_stroke(drawing_area_widget, cairo_context)
         end
+        
+        if clip
+          draw_shape(drawing_area_widget, cairo_context)
+          draw_clip(drawing_area_widget, cairo_context)
+        end
       end
       
       # Invokes cairo_context#underscored_shape_class_name method by default
@@ -190,6 +195,13 @@ module Glimmer
           cairo_context.send("set_#{property}", send(property)) if send(property)
         end
         cairo_context.stroke
+      end
+      
+      def draw_clip(drawing_area_widget, cairo_context)
+        SHAPE_GENERAL_PROPERTIES.each do |property|
+          cairo_context.send("set_#{property}", send(property)) if send(property)
+        end
+        cairo_context.clip
       end
       
       def normalize_one_based_color(rgb)
