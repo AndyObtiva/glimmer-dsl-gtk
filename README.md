@@ -154,7 +154,7 @@ Note that it is usually recommended to observe external model objects (not `self
 
 In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed.
 
-Here is a quick tutorial consisting of samples inspired and ported from [Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"](https://notepad.onghu.com/2021/cairo-samples-in-ruby/)
+Below is a quick tutorial consisting of samples inspired and ported from [Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"](https://notepad.onghu.com/2021/cairo-samples-in-ruby/).
 
 ### Arc
 
@@ -208,6 +208,59 @@ window {
 ```
 
 ![Arc](/screenshots/glimmer-dsl-gtk-mac-cairo-arc.png)
+
+### Arc Negative
+
+Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Arc Negative'
+  default_size 256, 256
+  
+  drawing_area {
+    # Surface Paint
+    paint 255, 255, 255
+    
+    # Set up the parameters
+    xc = 128.0
+    yc = 128.0
+    radius = 100.0
+    angle1 = 45.0  * (Math::PI/180.0) # angles are specified
+    angle2 = 180.0  * (Math::PI/180.0) # in radians
+    
+    # The main negative arc
+    arc_negative(xc, yc, radius, angle1, angle2) {
+      stroke 0, 0, 0
+      line_width 10
+    }
+    
+    # Draw helping lines
+    
+    # First, the circle at the centre
+    arc(xc, yc, 10.0, 0, 2*Math::PI) {
+      fill 255, 51, 51, 0.6
+    }
+    
+    # Then, the lines reaching out
+    path {
+      arc(xc, yc, radius, angle1, angle1)
+      line_to(xc, yc)
+      arc(xc, yc, radius, angle2, angle2)
+      line_to(xc, yc)
+      
+      stroke 255, 51, 51, 0.6
+      line_width 6
+    }
+  }
+}.show
+```
+
+![Arc Negative](/screenshots/glimmer-dsl-gtk-mac-cairo-arc-negative.png)
 
 ## Girb (Glimmer IRB)
 
