@@ -74,6 +74,11 @@ module Glimmer
         def post_add_content
           super
           @gtk.signal_connect(:draw) do |drawing_area_widget, cairo_context|
+            if @paint
+              cairo_context.set_source_rgb(Shape.normalize_one_based_color(@paint))
+              cairo_context.paint
+            end
+            
             shapes.each do |shape|
               shape.draw(drawing_area_widget, cairo_context)
             end
@@ -86,6 +91,10 @@ module Glimmer
           else
             super
           end
+        end
+        
+        def paint(*args)
+          @paint = args
         end
       end
     end

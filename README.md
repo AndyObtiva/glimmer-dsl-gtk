@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.4
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.5
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -80,7 +80,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.4'
+gem 'glimmer-dsl-gtk', '~> 0.0.5'
 ```
 
 And, then run:
@@ -148,13 +148,13 @@ The model is automatically enhanced as an `Glimmer::DataBinding::ObservableModel
 
 Note that it is usually recommended to observe external model objects (not `self`), but `self` is OK in very simple cases or presentation-related attributes only.
 
-### Declarative Cairo Shapes
+### Declarative Cairo Graphics
 
-Cairo is the engine behind drawing arbitrary 2D geometric shapes in GTK.
+[Cairo](https://www.cairographics.org/) is the engine behind drawing arbitrary 2D geometric shapes in [GTK](https://www.gtk.org/).
 
-In Glimmer DSL for GTK, you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed.
+In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed.
 
-Here is a quick tutorial consisting of samples inspired and ported from Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"
+Here is a quick tutorial consisting of samples inspired and ported from [Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"](https://notepad.onghu.com/2021/cairo-samples-in-ruby/)
 
 ### Arc
 
@@ -170,6 +170,9 @@ window {
   default_size 256, 256
   
   drawing_area {
+    # Surface Paint
+    paint 242.25, 242.25, 242.25
+    
     # Set up the parameters
     xc = 128.0
     yc = 128.0
@@ -203,6 +206,8 @@ window {
   }
 }.show
 ```
+
+![Arc](/screenshots/glimmer-dsl-gtk-mac-cairo-arc.png)
 
 ## Girb (Glimmer IRB)
 
@@ -434,9 +439,7 @@ window {
   default_size 400, 400
   
   drawing_area {
-    rectangle(0, 0, 400, 400) {
-      fill 255, 255, 255
-    }
+    paint 255, 255, 255
     
     arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90) {
       fill 255, 0, 0
@@ -548,61 +551,60 @@ window {
   
   drawing_area {
     on(:draw) do |drawing_area_widget, cairo_context|
-      cairo_context.rectangle(0, 0, 400, 400)
-      cairo_context.set_source_rgb(255, 255, 255)
-      cairo_context.fill
+      cairo_context.set_source_rgb(255/255.0, 255/255.0, 255/255.0)
+      cairo_context.paint
       
       cairo_context.arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90)
       cairo_context.set_source_rgb(255, 0, 0)
       cairo_context.fill
       
       cairo_context.arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90)
-      cairo_context.set_source_rgb(0, 128, 255)
+      cairo_context.set_source_rgb(0, 128/255.0, 255/255.0)
       cairo_context.set_line_width(3)
       cairo_context.stroke
 
       cairo_context.arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30)
-      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_source_rgb(255/255.0, 0, 0)
       cairo_context.fill
       
       cairo_context.arc(85, 185, 45, (Math::PI/180)*100, -(Math::PI/180)*30)
-      cairo_context.set_source_rgb(0, 128, 255)
+      cairo_context.set_source_rgb(0, 128/255.0, 255/255.0)
       cairo_context.set_line_width(3)
       cairo_context.stroke
       
       cairo_context.circle(85, 285, 45)
-      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_source_rgb(255/255.0, 0, 0)
       cairo_context.fill
       
       cairo_context.circle(85, 285, 45)
-      cairo_context.set_source_rgb(0, 128, 255)
+      cairo_context.set_source_rgb(0, 128/255.0, 255/255.0)
       cairo_context.set_line_width(3)
       cairo_context.stroke
       
       cairo_context.rectangle(140, 40, 180, 90)
-      cairo_context.set_source_rgb(255, 255, 0)
+      cairo_context.set_source_rgb(255/255.0, 255/255.0, 0)
       cairo_context.fill
       
       cairo_context.rectangle(140, 40, 180, 90)
-      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_source_rgb(255/255.0, 0, 0)
       cairo_context.set_line_width(3)
       cairo_context.stroke
       
       cairo_context.rounded_rectangle(140, 140, 180, 90, 30, 20)
-      cairo_context.set_source_rgb(255, 255, 0)
+      cairo_context.set_source_rgb(255/255.0, 255/255.0, 0)
       cairo_context.fill
       
       cairo_context.rounded_rectangle(140, 140, 180, 90, 30, 20)
-      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_source_rgb(255/255.0, 0, 0)
       cairo_context.set_line_width(3)
       cairo_context.stroke
       
       cairo_context.triangle(140, 240, 320, 240, 230, 330)
-      cairo_context.set_source_rgb(255, 255, 0)
+      cairo_context.set_source_rgb(255/255.0, 255/255.0, 0)
       cairo_context.fill
       
       cairo_context.triangle(140, 240, 320, 240, 230, 330)
-      cairo_context.set_source_rgb(255, 0, 0)
+      cairo_context.set_source_rgb(255/255.0, 0, 0)
       cairo_context.set_line_width(3)
       cairo_context.stroke
       
@@ -611,7 +613,7 @@ window {
       cairo_context.curve_to 190, 60, 200, 80, 210, 70
       cairo_context.curve_to 240, 80, 250, 100, 260, 90
       cairo_context.curve_to 290, 90, 300, 110, 310, 100
-      cairo_context.set_source_rgb(0, 255, 0)
+      cairo_context.set_source_rgb(0, 255/255.0, 0)
       cairo_context.fill
       
       cairo_context.new_path
@@ -619,7 +621,7 @@ window {
       cairo_context.curve_to 190, 60, 200, 80, 210, 70
       cairo_context.curve_to 240, 80, 250, 100, 260, 90
       cairo_context.curve_to 290, 90, 300, 110, 310, 100
-      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.set_source_rgb(0, 0, 255/255.0)
       cairo_context.stroke
       
       cairo_context.new_path
@@ -630,7 +632,7 @@ window {
       cairo_context.line_to 200, 200
       cairo_context.line_to 180, 170
       cairo_context.close_path
-      cairo_context.set_source_rgb(0, 255, 0)
+      cairo_context.set_source_rgb(0, 255/255.0, 0)
       cairo_context.fill
       
       cairo_context.new_path
@@ -641,7 +643,7 @@ window {
       cairo_context.line_to 200, 200
       cairo_context.line_to 180, 170
       cairo_context.close_path
-      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.set_source_rgb(0, 0, 255/255.0)
       cairo_context.stroke
       
       cairo_context.new_path
@@ -652,7 +654,7 @@ window {
       cairo_context.line_to 200, 280
       cairo_context.line_to 180, 270
       cairo_context.close_path
-      cairo_context.set_source_rgb(0, 255, 0)
+      cairo_context.set_source_rgb(0, 255/255.0, 0)
       cairo_context.fill
       
       cairo_context.new_path
@@ -663,7 +665,7 @@ window {
       cairo_context.line_to 200, 280
       cairo_context.line_to 180, 270
       cairo_context.close_path
-      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.set_source_rgb(0, 0, 255/255.0)
       cairo_context.stroke
       
       cairo_context.new_path
@@ -673,7 +675,7 @@ window {
       cairo_context.line_to 220, 340
       cairo_context.line_to 200, 330
       cairo_context.line_to 180, 320
-      cairo_context.set_source_rgb(0, 0, 255)
+      cairo_context.set_source_rgb(0, 0, 255/255.0)
       cairo_context.stroke
     end
   }

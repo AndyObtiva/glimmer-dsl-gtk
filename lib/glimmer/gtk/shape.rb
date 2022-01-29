@@ -102,6 +102,10 @@ module Glimmer
           end
           accumulator
         end
+        
+        def normalize_one_based_color(rgb)
+          rgb.each_with_index.map {|single_color, i| i == 3 ? single_color : single_color / 255.0}
+        end
       end
       
       SHAPE_FILL_PROPERTIES = [:fill_rule]
@@ -189,7 +193,7 @@ module Glimmer
       end
       
       def normalize_one_based_color(rgb)
-        rgb.each_with_index.map {|single_color, i| i == 3 ? single_color : single_color / 255.0}
+        self.class.normalize_one_based_color(rgb)
       end
       
       def respond_to?(method_name, include_private = false, &block)

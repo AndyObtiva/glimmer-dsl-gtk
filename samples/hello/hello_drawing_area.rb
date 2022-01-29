@@ -7,9 +7,7 @@ window {
   default_size 400, 400
   
   drawing_area {
-    rectangle(0, 0, 400, 400) {
-      fill 255, 255, 255
-    }
+    paint 255, 255, 255
     
     arc(85, 85, 45, (Math::PI/180)*90, -(Math::PI/180)*90) {
       fill 255, 0, 0

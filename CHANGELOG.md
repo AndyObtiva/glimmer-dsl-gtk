@@ -2,6 +2,7 @@
 
 ## 0.0.5
 
+- Support `drawing_area#paint(red, green, blue)` operation to set the initial `drawing_area` paint color base
 - Support `arc` as an operation inside `path` in Cairo declarative shape syntax
 
 ## 0.0.4
