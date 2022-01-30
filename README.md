@@ -158,7 +158,7 @@ Below is a quick tutorial consisting of samples inspired and ported from [Mohit 
 
 ### Arc
 
-Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+[samples/cairo/arc.rb](/samples/cairo/arc.rb)
 
 ```ruby
 require 'glimmer-dsl-gtk'
@@ -211,7 +211,7 @@ window {
 
 ### Arc Negative
 
-Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+[samples/cairo/arc_negative.rb](/samples/cairo/arc_negative.rb)
 
 ```ruby
 require 'glimmer-dsl-gtk'
@@ -264,7 +264,7 @@ window {
 
 ### Clip
 
-Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+[samples/cairo/clip.rb](/samples/cairo/clip.rb)
 
 ```ruby
 require 'glimmer-dsl-gtk'
@@ -307,7 +307,7 @@ window {
 
 ### Clip Image
 
-Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+[samples/cairo/clip_image.rb](/samples/cairo/clip_image.rb)
 
 ```ruby
 require 'glimmer-dsl-gtk'
@@ -326,7 +326,10 @@ window {
     }
 
     rectangle(0, 0, 256, 256) {
-      image = Cairo::ImageSurface.from_png(File.expand_path(File.join('images', 'breaking-blue-wave.png')))
+      # Source image is from:
+      # - https://www.publicdomainpictures.net/en/view-image.php?image=7683&picture=breaking-blue-wave
+      # Converted to PNG before using it
+      image = Cairo::ImageSurface.from_png(File.expand_path(File.join('..', '..', 'images', 'breaking-blue-wave.png'), __dir__))
       w = image.width
       h = image.height
   
