@@ -105,6 +105,10 @@ module Glimmer
           @drawing_operations << [:rectangle, args]
         end
       
+        def rounded_rectangle(*args)
+          @drawing_operations << [:rounded_rectangle, args]
+        end
+      
         def move_to(*args)
           @drawing_operations << [:move_to, args]
         end
