@@ -3,9 +3,9 @@
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[Glimmer](https://github.com/AndyObtiva/glimmer) DSL for [GTK](https://www.gtk.org/) enables building desktop applications with [Ruby-GNOME](https://github.com/ruby-gnome/ruby-gnome) (including [Cairo graphics](#declarative-cairo-graphics)).
+[Glimmer](https://github.com/AndyObtiva/glimmer) DSL for [GTK](https://www.gtk.org/) enables building desktop applications with [Ruby-GNOME](https://github.com/ruby-gnome/ruby-gnome) (including [Cairo graphics](#declarative-cairo-graphics)) using [MRI Ruby](https://www.ruby-lang.org).
 
-[GTK](https://www.gtk.org/) (aka GIMP-Toolkit or [incorrectly] GNOME-Toolkit) is the premiere desktop GUI toolkit on [Linux](https://www.gtk.org/docs/installations/linux/), which also runs on [Mac](https://www.gtk.org/docs/installations/macos/) ([Quartz GTK+](https://wiki.gnome.org/Projects/GTK/OSX)) and [Windows](https://www.gtk.org/docs/installations/windows).
+[GTK](https://www.gtk.org/) (aka GIMP-Toolkit or [incorrectly] GNOME-Toolkit) is the premiere desktop GUI toolkit on [Linux](https://www.gtk.org/docs/installations/linux/) (included in [GNOME flavors of Linux](https://www.gnome.org/getting-gnome/), where [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk)'s forte is), which also runs on [Mac](https://www.gtk.org/docs/installations/macos/) ([Quartz GTK+](https://wiki.gnome.org/Projects/GTK/OSX)) and [Windows](https://www.gtk.org/docs/installations/windows).
 
 [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk) aims to supercharge productivity and maintainability in developing [Ruby-GNOME](https://github.com/ruby-gnome/ruby-gnome) applications by providing a DSL similar to [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt) having:
 - Declarative DSL syntax that visually maps to the GUI widget hierarchy
@@ -32,19 +32,25 @@ Linux | Mac | Windows
 
 NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-concept). If you want it developed faster, then [open an issue report](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues/new). I have completed some GitHub project features much faster before due to [issue reports](https://github.com/AndyObtiva/glimmer-dsl-gtk/issues) and [pull requests](https://github.com/AndyObtiva/glimmer-dsl-gtk/pulls). Please help make better by contributing, adopting for small or low risk projects, and providing feedback. It is still an early alpha, so the more feedback and issues you report the better.
 
-Other [Glimmer](https://rubygems.org/gems/glimmer) DSL gems you might be interested in:
-- [glimmer-dsl-swt](https://github.com/AndyObtiva/glimmer-dsl-swt): Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)
-- [glimmer-dsl-opal](https://github.com/AndyObtiva/glimmer-dsl-opal): Glimmer DSL for Opal (Pure Ruby Web GUI and Auto-Webifier of Desktop Apps)
-- [glimmer-dsl-tk](https://github.com/AndyObtiva/glimmer-dsl-tk): Glimmer DSL for Tk (MRI Ruby Desktop Development GUI Library)
-- [glimmer-dsl-libui](https://github.com/AndyObtiva/glimmer-dsl-libui): Glimmer DSL for Tk (Prerequisite-Free Ruby Desktop Development GUI Library)
-- [glimmer-dsl-xml](https://github.com/AndyObtiva/glimmer-dsl-xml): Glimmer DSL for XML (& HTML)
-- [glimmer-dsl-css](https://github.com/AndyObtiva/glimmer-dsl-css): Glimmer DSL for CSS
+**[Glimmer](https://rubygems.org/gems/glimmer) DSL Comparison Table:**
+DSL | Platforms | Native? | Vector Graphics? | Pros | Cons | Prereqs
+----|-----------|---------|------------------|------|------|--------
+[Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)](https://github.com/AndyObtiva/glimmer-dsl-swt) | Mac / Windows / Linux | Yes | Yes (Canvas Shape DSL) | Very Mature / Scaffolding / Native Executable Packaging / Custom Widgets | Slow JRuby Startup Time / Heavy Memory Footprint | Java / JRuby 
+[Glimmer DSL for Opal (Pure Ruby Web GUI and Auto-Webifier of Desktop Apps)](https://github.com/AndyObtiva/glimmer-dsl-opal) | All Web Browsers | No | Yes (Canvas Shape DSL) | Simpler than All JavaScript Technologies / Auto-Webify Desktop Apps | Setup Process / Only Rails 5 Support for Now | Rails
+[Glimmer DSL for LibUI (Prerequisite-Free Ruby Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-libui) | Mac / Windows / Linux | Yes | Yes (Area API) | Fast Startup Time / Light Memory Footprint | LibUI is an Incomplete Mid-Alpha Only | None Other Than MRI Ruby
+[Glimmer DSL for Tk (MRI Ruby Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-tk) | Mac / Windows / Linux | Some Native-Themed Widgets (Not Truly Native) | Yes (Canvas) | Fast Startup Time / Light Memory Footprint | Widgets Do Not Look Truly Native, Espcially on Linux | ActiveTcl / MRI Ruby
+[Glimmer DSL for GTK (Ruby-GNOME Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-gtk) | Mac / Windows / Linux | Only on Linux | Yes (Cairo) | Complete Access to GNOME Features on Linux (Forte) | Not Native on Mac and Windows | None Other Than MRI Ruby on Linux / Brew Packages on Mac / MSYS & MING Toolchains on Windows / MRI Ruby
+[Glimmer DSL for FX (FOX Toolkit Ruby Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-fx) | Mac (requires XQuartz) / Windows / Linux | No | Yes (Canvas) | No Prerequisites on Windows (Forte Since Binaries Are Included Out of The Box) | Widgets Do Not Look Native / Mac Usage Obtrusively Starts XQuartz | None Other Than MRI Ruby on Windows / XQuarts on Mac / MRI Ruby
+[Glimmer DSL for JFX (JRuby JavaFX Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-jfx) | Mac / Windows / Linux | No | Yes (javafx.scene.shape and javafx.scene.canvas) | Rich in Custom Widgets | Slow JRuby Startup Time / Heavy Memory Footprint / Widgets Do Not Look Native | Java / JRuby / JavaFX SDK
+[Glimmer DSL for Swing (JRuby Swing Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-swing) | Mac / Windows / Linux | No | Yes (Java2D) | Very Mature | Slow JRuby Startup Time / Heavy Memory Footprint / Widgets Do Not Look Native | Java / JRuby
+[Glimmer DSL for XML (& HTML)](https://github.com/AndyObtiva/glimmer-dsl-xml) | All Web Browsers | No | Yes (SVG) | Programmable / Lighter-weight Than Actual XML | XML Elements Are Sometimes Not Well-Named (Many Types of Input) | None
+[Glimmer DSL for CSS](https://github.com/AndyObtiva/glimmer-dsl-css) | All Web Browsers | No | Yes | Programmable | CSS Is Over-Engineered / Too Many Features To Learn | None
 
 ## Prerequisites
 
 ### Linux
 
-GNOME-based Linux installations do not need any pre-requisites since they have GTK built-in, so you can skip to [Setup](#setup) right away.
+GNOME-based Linux installations do not need any prerequisites since they have GTK built-in, so you can skip to [Setup](#setup) right away.
 
 Still, if you run into issues installing the GTK gem in [Setup](#setup), you may try these commands first:
 ```
@@ -156,7 +162,7 @@ In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can dra
 
 Below is a quick tutorial consisting of samples inspired and ported from [Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"](https://notepad.onghu.com/2021/cairo-samples-in-ruby/).
 
-### Arc
+#### Arc
 
 [samples/cairo/arc.rb](/samples/cairo/arc.rb)
 
@@ -166,7 +172,7 @@ require 'glimmer-dsl-gtk'
 include Glimmer
 
 window {
-  title 'Hello, Drawing Area!'
+  title 'Arc'
   default_size 256, 256
   
   drawing_area {
@@ -209,7 +215,7 @@ window {
 
 ![Arc](/screenshots/glimmer-dsl-gtk-mac-cairo-arc.png)
 
-### Arc Negative
+#### Arc Negative
 
 [samples/cairo/arc_negative.rb](/samples/cairo/arc_negative.rb)
 
@@ -262,7 +268,7 @@ window {
 
 ![Arc Negative](/screenshots/glimmer-dsl-gtk-mac-cairo-arc-negative.png)
 
-### Clip
+#### Clip
 
 [samples/cairo/clip.rb](/samples/cairo/clip.rb)
 
@@ -305,7 +311,7 @@ window {
 
 ![Clip](/screenshots/glimmer-dsl-gtk-mac-cairo-clip.png)
 
-### Clip Image
+#### Clip Image
 
 [samples/cairo/clip_image.rb](/samples/cairo/clip_image.rb)
 
@@ -347,7 +353,7 @@ window {
 
 ![Clip Image](/screenshots/glimmer-dsl-gtk-mac-cairo-clip-image.png)
 
-### Curve to
+#### Curve to
 
 [samples/cairo/curve_to.rb](/samples/cairo/curve_to.rb)
 
@@ -395,7 +401,7 @@ window {
 
 ![Curve to](/screenshots/glimmer-dsl-gtk-mac-cairo-curve-to.png)
 
-### Dashes
+#### Dashes
 
 [samples/cairo/dashes.rb](/samples/cairo/dashes.rb)
 
@@ -434,7 +440,7 @@ window {
 
 ![Dashes](/screenshots/glimmer-dsl-gtk-mac-cairo-dashes.png)
 
-### Fill and Stroke 2
+#### Fill and Stroke 2
 
 (note: there is no Fill and Stroke 1; this was adopted from [Mohit's blog post](https://notepad.onghu.com/2021/cairo-samples-in-ruby/), which only mentioned Fill and Stroke 2)
 
@@ -481,7 +487,7 @@ window {
 
 ![Fill and Stroke 2](/screenshots/glimmer-dsl-gtk-mac-cairo-fill-and-stroke2.png)
 
-### Fill Style
+#### Fill Style
 
 [samples/cairo/fill_style.rb](/samples/cairo/fill_style.rb)
 
@@ -533,7 +539,7 @@ window {
 
 ![Fill Style](/screenshots/glimmer-dsl-gtk-mac-cairo-fill-style.png)
 
-### Gradient
+#### Gradient
 
 [samples/cairo/gradient.rb](/samples/cairo/gradient.rb)
 
@@ -573,7 +579,7 @@ window {
 
 ![Gradient](/screenshots/glimmer-dsl-gtk-mac-cairo-gradient.png)
 
-### Image
+#### Image
 
 [samples/cairo/image.rb](/samples/cairo/image.rb)
 
@@ -610,7 +616,7 @@ window {
 
 ![Image](/screenshots/glimmer-dsl-gtk-mac-cairo-image.png)
 
-### Image Gradient
+#### Image Gradient
 
 [samples/cairo/image_gradient.rb](/samples/cairo/image_gradient.rb)
 
@@ -656,7 +662,7 @@ window {
 
 ![Image Gradient](/screenshots/glimmer-dsl-gtk-mac-cairo-image-gradient.png)
 
-### Multi Segment Caps
+#### Multi Segment Caps
 
 [samples/cairo/multi_segment_caps.rb](/samples/cairo/multi_segment_caps.rb)
 
@@ -692,7 +698,7 @@ window {
 
 ![Multi Segment Caps](/screenshots/glimmer-dsl-gtk-mac-cairo-multi-segment-caps.png)
 
-### Rounded Rectangle
+#### Rounded Rectangle
 
 [samples/cairo/rounded_rectangle.rb](/samples/cairo/rounded_rectangle.rb)
 
@@ -721,7 +727,7 @@ window {
 
 ![Rounded Rectangle](/screenshots/glimmer-dsl-gtk-mac-cairo-rounded-rectangle.png)
 
-### Set line cap
+#### Set line cap
 
 [samples/cairo/set_line_cap.rb](/samples/cairo/set_line_cap.rb)
 
@@ -783,7 +789,7 @@ window {
 
 ![Set line cap](/screenshots/glimmer-dsl-gtk-mac-cairo-set-line-cap.png)
 
-### Set line join
+#### Set line join
 
 [samples/cairo/set_line_join.rb](/samples/cairo/set_line_join.rb)
 
@@ -835,7 +841,7 @@ window {
 
 ![Set line join](/screenshots/glimmer-dsl-gtk-mac-cairo-set-line-join.png)
 
-### Text
+#### Text
 
 [samples/cairo/text.rb](/samples/cairo/text.rb)
 
@@ -1745,7 +1751,7 @@ class Tetris
         mi.submenu = m.gtk
       }
       
-      menu_item(label: 'Options') { |mi|
+      menu_item(label: 'Help') { |mi|
         m = menu {
           menu_item(label: 'About') {
             on(:activate) do

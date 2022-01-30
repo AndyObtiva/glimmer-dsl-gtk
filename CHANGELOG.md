@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.9
+
+- Fix Tetris Help menu (was called Options by mistake)
+
 ## 0.0.8
 
 - Download `images/breaking-blue-wave.png` from web in Cairo examples that use it (`image.rb`, `clip_image.rb`, `image_gradient.rb`) to avoid bloating Ruby gem

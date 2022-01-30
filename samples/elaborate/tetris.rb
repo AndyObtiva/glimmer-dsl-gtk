@@ -189,7 +189,7 @@ class Tetris
         mi.submenu = m.gtk
       }
       
-      menu_item(label: 'Options') { |mi|
+      menu_item(label: 'Help') { |mi|
         m = menu {
           menu_item(label: 'About') {
             on(:activate) do
