@@ -75,6 +75,15 @@ module Glimmer
           super
           @gtk.signal_connect(:draw) do |drawing_area_widget, cairo_context|
             if @paint
+            # TODO                 if the_fill.first.is_a?(Cairo::ImageSurface)
+#           cairo_context.set_source(*the_fill)
+#         elsif the_fill.size == 3
+#           cairo_context.set_source_rgb(*the_fill)
+#         elsif the_fill.size == 4
+#           cairo_context.set_source_rgba(*the_fill)
+#         end
+
+
               cairo_context.set_source_rgb(Shape.normalize_one_based_color(@paint))
               cairo_context.paint
             end

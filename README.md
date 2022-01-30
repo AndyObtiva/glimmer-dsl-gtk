@@ -305,6 +305,40 @@ window {
 
 ![Clip](/screenshots/glimmer-dsl-gtk-mac-cairo-clip.png)
 
+### Clip Image
+
+Example (you may copy/paste in [`girb`](#girb-glimmer-irb))
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Clip'
+  default_size 256, 256
+  
+  drawing_area {
+    paint 242.25, 242.25, 242.25
+
+    arc(128.0, 128.0, 76.8, 0, 2 * Math::PI) {
+      clip true # designate arc as the clipping area
+    }
+
+    rectangle(0, 0, 256, 256) {
+      image = Cairo::ImageSurface.from_png(File.expand_path(File.join('images', 'breaking-blue-wave.png')))
+      w = image.width
+      h = image.height
+  
+      scale 256.0/w, 256.0/h
+      fill image, 0, 0
+    }
+  }
+}.show
+```
+
+![Clip Image](/screenshots/glimmer-dsl-gtk-mac-cairo-clip-image.png)
+
 ## Girb (Glimmer IRB)
 
 You can run the `girb` command (`bin/girb` if you cloned the project locally):

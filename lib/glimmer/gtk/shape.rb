@@ -122,6 +122,7 @@ module Glimmer
         @parent = parent
         @args = args
         @block = block
+        @transforms = []
         post_add_content if @block.nil?
       end
       
@@ -172,8 +173,14 @@ module Glimmer
       end
       
       def draw_fill(drawing_area_widget, cairo_context)
+        @transforms.each do |transform|
+          cairo_context.send(transform.first, *transform.last)
+        end
         the_fill = normalize_one_based_color(fill)
-        if the_fill.size == 3
+        # TODO unite this code with stroke code and drawing area paint code
+        if the_fill.first.is_a?(Cairo::ImageSurface)
+          cairo_context.set_source(*the_fill)
+        elsif the_fill.size == 3
           cairo_context.set_source_rgb(*the_fill)
         elsif the_fill.size == 4
           cairo_context.set_source_rgba(*the_fill)
@@ -182,6 +189,7 @@ module Glimmer
           cairo_context.send("set_#{property}", send(property)) if send(property)
         end
         cairo_context.fill
+        cairo_context.identity_matrix
       end
       
       def draw_stroke(drawing_area_widget, cairo_context)
@@ -204,7 +212,20 @@ module Glimmer
         cairo_context.clip
       end
       
+      def translate(x, y)
+        @transforms << [:translate, [x, y]]
+      end
+      
+      def scale(x, y)
+        @transforms << [:scale, [x, y]]
+      end
+      
+      def rotate(angle)
+        @transforms << [:rotate, [angle]]
+      end
+      
       def normalize_one_based_color(rgb)
+        return rgb if rgb.first.is_a?(Cairo::ImageSurface)
         self.class.normalize_one_based_color(rgb)
       end
       
