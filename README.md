@@ -152,7 +152,7 @@ Note that it is usually recommended to observe external model objects (not `self
 
 [Cairo](https://www.cairographics.org/) is the engine behind drawing arbitrary 2D geometric shapes in [GTK](https://www.gtk.org/).
 
-In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed.
+In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed. Declarative syntax also yields less code that is simpler and more understandable/maintainable.
 
 Below is a quick tutorial consisting of samples inspired and ported from [Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"](https://notepad.onghu.com/2021/cairo-samples-in-ruby/).
 
@@ -428,6 +428,51 @@ window {
 ```
 
 ![Dashes](/screenshots/glimmer-dsl-gtk-mac-cairo-dashes.png)
+
+### Fill and Stroke 2
+
+[samples/cairo/fill_and_stroke2.rb](/samples/cairo/fill_and_stroke2.rb)
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Fill and Stroke 2'
+  default_size 256, 256
+  
+  drawing_area {
+    paint 242.25, 242.25, 242.25
+    
+    path {
+      move_to 128.0, 25.6
+      line_to 230.4, 230.4
+      rel_line_to -102.4, 0.0
+      curve_to 51.2, 230.4, 51.2, 128.0, 128.0, 128.0
+      close_path
+
+      fill 0, 0, 255
+      stroke 0, 0, 0
+      line_width 10
+    }
+    
+    path {
+      move_to 64.0, 25.6
+      rel_line_to 51.2, 51.2
+      rel_line_to -51.2, 51.2
+      rel_line_to -51.2, -51.2
+      close_path
+
+      fill 0, 0, 255
+      stroke 0, 0, 0
+      line_width 10
+    }
+  }
+}.show
+```
+
+![Fill and Stroke 2](/screenshots/glimmer-dsl-gtk-mac-cairo-fill-and-stroke2.png)
 
 ## Girb (Glimmer IRB)
 
