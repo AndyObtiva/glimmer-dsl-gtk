@@ -57,6 +57,8 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
+require 'glimmer/gtk/transformable'
+
 module Glimmer
   module Gtk
     # Represents Gtk shape objects drawn on area widget, like rectangle, arc, and path
@@ -120,6 +122,8 @@ module Glimmer
         end
       end
       
+      prepend Transformable
+      
       SHAPE_FILL_PROPERTIES = [:fill_rule]
       SHAPE_STROKE_PROPERTIES = [:dash, :font_face, :font_matrix, :font_options, :font_size, :line_cap, :line_join, :line_width, :miter_limit, :scaled_font]
       SHAPE_GENERAL_PROPERTIES = [:matrix, :operator, :tolerance]
@@ -134,7 +138,6 @@ module Glimmer
         @parent = parent
         @args = args
         @block = block
-        @transforms = []
         post_add_content if @block.nil?
       end
       
@@ -214,22 +217,6 @@ module Glimmer
         end
         cairo_context.clip
         cairo_context.set_matrix(previous_matrix)
-      end
-      
-      def apply_transforms(cairo_context)
-        @transforms.each { |transform| cairo_context.send(transform.first, *transform.last) }
-      end
-      
-      def translate(x, y)
-        @transforms << [:translate, [x, y]]
-      end
-      
-      def scale(x, y)
-        @transforms << [:scale, [x, y]]
-      end
-      
-      def rotate(angle)
-        @transforms << [:rotate, [angle]]
       end
       
       def respond_to?(method_name, include_private = false, &block)

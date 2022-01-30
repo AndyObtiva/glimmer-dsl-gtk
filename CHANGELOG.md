@@ -4,6 +4,7 @@
 
 - Support declarative `fill`/`paint` of `image, x, y` in cairo graphics
 - Support declarative transforms on cairo graphics shapes: `translate`, `scale`, `rotate`
+- Support applying transform on `drawing_area` `paint`
 
 ## 0.0.5
 

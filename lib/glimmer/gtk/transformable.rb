@@ -57,52 +57,29 @@
 #
 # If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
 
-require 'glimmer/gtk/transformable'
-
 module Glimmer
   module Gtk
-    class WidgetProxy
-      # Proxy for Gtk drawing area objects
-      #
-      # Follows the Proxy Design Pattern
-      class DrawingAreaProxy < WidgetProxy
-        prepend Transformable
+    # Represents transformable view elements like shapes and drawing_area
+    module Transformable
+      def initialize(keyword, parent, args, &block)
+        @transforms = []
+        super
+      end
       
-        attr_reader :shapes
-  
-        def initialize(keyword, parent, args, &block)
-          @shapes = []
-          super
-        end
-        
-        def post_add_content
-          super
-          @gtk.signal_connect(:draw) do |drawing_area_widget, cairo_context|
-            if @paint
-              previous_matrix = cairo_context.matrix
-              apply_transforms(cairo_context)
-              Shape.set_source_dynamically(cairo_context, @paint)
-              cairo_context.paint
-              cairo_context.set_matrix(previous_matrix)
-            end
-            
-            shapes.each do |shape|
-              shape.draw(drawing_area_widget, cairo_context)
-            end
-          end
-        end
-        
-        def post_initialize_child(child)
-          if child.is_a?(Glimmer::Gtk::Shape)
-            shapes << child
-          else
-            super
-          end
-        end
-        
-        def paint(*args)
-          @paint = args
-        end
+      def apply_transforms(cairo_context)
+        @transforms.each { |transform| cairo_context.send(transform.first, *transform.last) }
+      end
+      
+      def translate(x, y)
+        @transforms << [:translate, [x, y]]
+      end
+      
+      def scale(x, y)
+        @transforms << [:scale, [x, y]]
+      end
+      
+      def rotate(angle)
+        @transforms << [:rotate, [angle]]
       end
     end
   end
