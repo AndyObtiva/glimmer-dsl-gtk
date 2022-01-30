@@ -192,7 +192,7 @@ module Glimmer
         apply_transforms(cairo_context)
         self.class.set_source_dynamically(cairo_context, fill)
         (SHAPE_FILL_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
-          cairo_context.send("set_#{property}", send(property)) if send(property)
+          cairo_context.send("set_#{property}", *send(property)) if send(property)
         end
         cairo_context.fill
         cairo_context.set_matrix(previous_matrix)
@@ -203,7 +203,7 @@ module Glimmer
         apply_transforms(cairo_context)
         self.class.set_source_dynamically(cairo_context, stroke)
         (SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
-          cairo_context.send("set_#{property}", send(property)) if send(property)
+          cairo_context.send("set_#{property}", *send(property)) if send(property)
         end
         cairo_context.stroke
         cairo_context.set_matrix(previous_matrix)
@@ -213,7 +213,7 @@ module Glimmer
         previous_matrix = cairo_context.matrix
         apply_transforms(cairo_context)
         SHAPE_GENERAL_PROPERTIES.each do |property|
-          cairo_context.send("set_#{property}", send(property)) if send(property)
+          cairo_context.send("set_#{property}", *send(property)) if send(property)
         end
         cairo_context.clip
         cairo_context.set_matrix(previous_matrix)

@@ -4,6 +4,7 @@
 
 - samples/cairo/clip_image.rb
 - samples/cairo/curve_to.rb
+- samples/cairo/dashes.rb
 - Support declarative `fill`/`paint` of `image, x, y` in cairo graphics
 - Support declarative transforms on cairo graphics shapes: `translate`, `scale`, `rotate`
 - Support applying transform on `drawing_area` `paint`
