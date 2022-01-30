@@ -5,4 +5,4 @@
 - Support simpler usage of `box` `pack_start` and `pack_end`
 - Consider automatically destroying dialogs on response event
 - Support drawing images with Web URLs
-- Set fill rule with ruby symbols
+- Set fill rule, line cap with ruby symbols

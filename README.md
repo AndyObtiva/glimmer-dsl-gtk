@@ -641,6 +641,42 @@ window {
 
 ![Image Gradient](/screenshots/glimmer-dsl-gtk-mac-cairo-image-gradient.png)
 
+### Multi Segment Caps
+
+[samples/cairo/multi_segment_caps.rb](/samples/cairo/multi_segment_caps.rb)
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Multi Segment Caps'
+  default_size 256, 256
+  
+  drawing_area {
+    paint 242.25, 242.25, 242.25
+    
+    path {
+      move_to 50.0, 75.0
+      line_to 200.0, 75.0
+      
+      move_to 50.0, 125.0
+      line_to 200.0, 125.0
+      
+      move_to 50.0, 175.0
+      line_to 200.0, 175.0
+      
+      line_width 30
+      line_cap Cairo::LINE_CAP_ROUND
+      stroke 0, 0, 0
+    }
+  }
+}.show
+```
+
+![Multi Segment Caps](/screenshots/glimmer-dsl-gtk-mac-cairo-multi-segment-caps.png)
+
 ## Girb (Glimmer IRB)
 
 You can run the `girb` command (`bin/girb` if you cloned the project locally):
