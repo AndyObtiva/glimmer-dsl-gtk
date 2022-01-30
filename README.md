@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.5
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.6
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -80,7 +80,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.5'
+gem 'glimmer-dsl-gtk', '~> 0.0.6'
 ```
 
 And, then run:
@@ -767,6 +767,58 @@ window {
 ```
 
 ![Set line cap](/screenshots/glimmer-dsl-gtk-mac-cairo-set-line-cap.png)
+
+### Set line join
+
+[samples/cairo/set_line_join.rb](/samples/cairo/set_line_join.rb)
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Set line join'
+  default_size 256, 256
+  
+  drawing_area {
+    paint 242.25, 242.25, 242.25
+    
+    # The main code
+    path {
+      move_to 76.8, 84.48
+      rel_line_to 51.2, -51.2
+      rel_line_to 51.2, 51.2
+      
+      line_join Cairo::LINE_JOIN_MITER # default
+      line_width 40.96
+      stroke 0, 0, 0
+    }
+    
+    path {
+      move_to 76.8, 161.28
+      rel_line_to 51.2, -51.2
+      rel_line_to 51.2, 51.2
+      
+      line_join Cairo::LINE_JOIN_BEVEL
+      line_width 40.96
+      stroke 0, 0, 0
+    }
+    
+    path {
+      move_to 76.8, 238.08
+      rel_line_to 51.2, -51.2
+      rel_line_to 51.2, 51.2
+      
+      line_join Cairo::LINE_JOIN_ROUND
+      line_width 40.96
+      stroke 0, 0, 0
+    }
+  }
+}.show
+```
+
+![Set line join](/screenshots/glimmer-dsl-gtk-mac-cairo-set-line-join.png)
 
 ## Girb (Glimmer IRB)
 

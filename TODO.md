@@ -6,3 +6,5 @@
 - Consider automatically destroying dialogs on response event
 - Support drawing images with Web URLs
 - Set fill rule, line cap with ruby symbols
+- Take cairo sample screenshots in Linux
+- Take cairo sample screenshots in Windows

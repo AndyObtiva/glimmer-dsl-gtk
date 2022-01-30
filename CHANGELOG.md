@@ -5,6 +5,15 @@
 - samples/cairo/clip_image.rb
 - samples/cairo/curve_to.rb
 - samples/cairo/dashes.rb
+- samples/cairo/fill_and_stroke2.rb
+- samples/cairo/fill_style.rb
+- samples/cairo/gradient.rb
+- samples/cairo/image.rb
+- samples/cairo/image_gradient.rb
+- samples/cairo/multi_segment_caps.rb
+- samples/cairo/rounded_rectangle.rb
+- samples/cairo/set_line_cap.rb
+- samples/cairo/set_line_join.rb
 - Supported nested sub-paths (nesting `path` within another `path`)
 - Support declarative `fill`/`paint` of `image, x, y` in cairo graphics
 - Support declarative transforms on cairo graphics shapes: `translate`, `scale`, `rotate`
