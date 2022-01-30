@@ -152,7 +152,7 @@ Note that it is usually recommended to observe external model objects (not `self
 
 [Cairo](https://www.cairographics.org/) is the engine behind drawing arbitrary 2D geometric shapes in [GTK](https://www.gtk.org/).
 
-In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed. Declarative syntax also yields less code that is simpler and more understandable/maintainable.
+In [Glimmer DSL for GTK](https://rubygems.org/gems/glimmer-dsl-gtk), you can draw Cairo shapes declaratively in a way similar to how SVG works, but using one language; Ruby, thus being able to utilize Ruby logic (e.g. if statement or each loop) with it effortlessly when needed. Declarative syntax also yields less code that is simpler, not dependent on ordering of nested properties, and more understandable/maintainable.
 
 Below is a quick tutorial consisting of samples inspired and ported from [Mohit Sindhwani's blog post "Cairo with Ruby - Samples using RCairo"](https://notepad.onghu.com/2021/cairo-samples-in-ruby/).
 
@@ -431,6 +431,8 @@ window {
 
 ### Fill and Stroke 2
 
+(note: there is no Fill and Stroke 1; this was adopted from [Mohit's blog post](https://notepad.onghu.com/2021/cairo-samples-in-ruby/), which only mentioned Fill and Stroke 2)
+
 [samples/cairo/fill_and_stroke2.rb](/samples/cairo/fill_and_stroke2.rb)
 
 ```ruby
@@ -473,6 +475,58 @@ window {
 ```
 
 ![Fill and Stroke 2](/screenshots/glimmer-dsl-gtk-mac-cairo-fill-and-stroke2.png)
+
+### Fill Style
+
+[samples/cairo/fill_style.rb](/samples/cairo/fill_style.rb)
+
+```ruby
+require 'glimmer-dsl-gtk'
+
+include Glimmer
+
+window {
+  title 'Fill Style'
+  default_size 256, 256
+  
+  drawing_area {
+    paint 242.25, 242.25, 242.25
+    
+    path {
+      rectangle 12, 12, 232, 70
+      path { # sub-path
+        arc 64, 64, 40, 0, 2*Math::PI
+      }
+      path { # sub-path
+        arc_negative 192, 64, 40, 0, -2*Math::PI
+      }
+      
+      fill_rule Cairo::FILL_RULE_EVEN_ODD
+      line_width 6
+      fill 0, 178.5, 0
+      stroke 0, 0, 0
+    }
+    
+    path {
+      rectangle 12, 12, 232, 70
+      path { # sub-path
+        arc 64, 64, 40, 0, 2*Math::PI
+      }
+      path { # sub-path
+        arc_negative 192, 64, 40, 0, -2*Math::PI
+      }
+      
+      translate 0, 128
+      fill_rule Cairo::FILL_RULE_WINDING
+      line_width 6
+      fill 0, 0, 229.5
+      stroke 0, 0, 0
+    }
+  }
+}.show
+```
+
+![Fill Style](/screenshots/glimmer-dsl-gtk-mac-cairo-fill-style.png)
 
 ## Girb (Glimmer IRB)
 

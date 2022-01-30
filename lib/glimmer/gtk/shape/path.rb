@@ -69,6 +69,14 @@ module Glimmer
           @drawing_operations = []
         end
         
+        def post_initialize_child(child)
+          child_paths << child if child.is_a?(Path)
+        end
+        
+        def child_paths
+          @child_paths ||= []
+        end
+        
         def draw_shape(drawing_area_widget, cairo_context)
           previous_matrix = cairo_context.matrix
           apply_transforms(cairo_context)
@@ -76,11 +84,25 @@ module Glimmer
           @drawing_operations.each do |drawing_operation_details|
             cairo_context.send(drawing_operation_details[0], *drawing_operation_details[1])
           end
+          child_paths.each do |child|
+            cairo_context.new_sub_path
+            child.drawing_operations.each do |drawing_operation_details|
+              cairo_context.send(drawing_operation_details[0], *drawing_operation_details[1])
+            end
+          end
           cairo_context.set_matrix(previous_matrix)
         end
         
         def arc(*args)
           @drawing_operations << [:arc, args]
+        end
+      
+        def arc_negative(*args)
+          @drawing_operations << [:arc_negative, args]
+        end
+      
+        def rectangle(*args)
+          @drawing_operations << [:rectangle, args]
         end
       
         def move_to(*args)
