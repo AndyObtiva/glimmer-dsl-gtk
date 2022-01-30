@@ -106,13 +106,13 @@ module Glimmer
         end
         
         def one_based_color_rgb(rgb)
-          return rgb if rgb.first.is_a?(Cairo::ImageSurface)
+          return rgb if rgb.is_a?(Cairo::Pattern) || rgb.first.is_a?(Cairo::ImageSurface)
           rgb.each_with_index.map {|single_color, i| i == 3 ? single_color : single_color / 255.0}
         end
         
         def set_source_dynamically(cairo_context, source_args)
           source_args = one_based_color_rgb(source_args)
-          if source_args.first.is_a?(Cairo::ImageSurface)
+          if source_args.is_a?(Cairo::Pattern) || source_args.first.is_a?(Cairo::ImageSurface)
             cairo_context.set_source(*source_args)
           elsif source_args.size == 3
             cairo_context.set_source_rgb(*source_args)
