@@ -3,7 +3,7 @@
 ## 0.0.7
 
 - samples/cairo/text.rb
-- Support for `path` nested `show_text`, `text_path` operations
+- Support for `path` nested `show_text`, `text_path`, `show_glyphs`, `glyph_path`, `new_sub_path` operations
 
 ## 0.0.6
 

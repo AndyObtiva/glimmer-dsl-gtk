@@ -93,6 +93,12 @@ module Glimmer
           cairo_context.set_matrix(previous_matrix)
         end
         
+        # TODO look into a way to generalize the declaration of the methods below (or perform code reuse)
+        
+        def new_sub_path(*args)
+          @drawing_operations << [:new_sub_path, args]
+        end
+      
         def arc(*args)
           @drawing_operations << [:arc, args]
         end
@@ -114,6 +120,14 @@ module Glimmer
         end
       
         def show_text(*args)
+          @drawing_operations << [:show_text, args]
+        end
+      
+        def glyph_path(*args)
+          @drawing_operations << [:text_path, args]
+        end
+      
+        def show_glyphs(*args)
           @drawing_operations << [:show_text, args]
         end
       

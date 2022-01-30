@@ -126,11 +126,12 @@ module Glimmer
       
       SHAPE_FILL_PROPERTIES = [:fill_rule]
       SHAPE_STROKE_PROPERTIES = [:dash, :line_cap, :line_join, :line_width, :miter_limit, :scaled_font]
-      SHAPE_GENERAL_PROPERTIES = [:matrix, :operator, :tolerance, :font_face, :font_matrix, :font_options, :font_size]
+      SHAPE_GENERAL_PROPERTIES = [:matrix, :operator, :tolerance]
+      SHAPE_FONT_PROPERTIES = [:font_face, :font_matrix, :font_options, :font_size]
       
       attr_reader :parent, :args, :keyword, :block
       attr_accessor :fill, :stroke, :clip
-      attr_accessor *(SHAPE_FILL_PROPERTIES + SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES)
+      attr_accessor *(SHAPE_FILL_PROPERTIES + SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES + SHAPE_FONT_PROPERTIES)
       # TODO consider automatically setting attribute accessors by looking up set_xyz methods on cairo context
       
       def initialize(keyword, parent, args, &block)
@@ -162,16 +163,19 @@ module Glimmer
       # Subclasses must either implement draw_shape hook method or override this method directly
       def draw(drawing_area_widget, cairo_context)
         if fill
+          draw_font(drawing_area_widget, cairo_context)
           draw_shape(drawing_area_widget, cairo_context)
           draw_fill(drawing_area_widget, cairo_context)
         end
         
         if stroke
+          draw_font(drawing_area_widget, cairo_context)
           draw_shape(drawing_area_widget, cairo_context)
           draw_stroke(drawing_area_widget, cairo_context)
         end
         
         if clip
+          draw_font(drawing_area_widget, cairo_context)
           draw_shape(drawing_area_widget, cairo_context)
           draw_clip(drawing_area_widget, cairo_context)
         end
@@ -194,18 +198,24 @@ module Glimmer
         previous_matrix = cairo_context.matrix
         apply_transforms(cairo_context, target: :fill)
         self.class.set_source_dynamically(cairo_context, fill)
-        (SHAPE_FILL_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
+        (SHAPE_GENERAL_PROPERTIES + SHAPE_FILL_PROPERTIES).each do |property|
           apply_property(cairo_context, property)
         end
         cairo_context.fill
         cairo_context.set_matrix(previous_matrix)
       end
       
+      def draw_font(drawing_area_widget, cairo_context)
+        SHAPE_FONT_PROPERTIES.each do |property|
+          apply_property(cairo_context, property)
+        end
+      end
+      
       def draw_stroke(drawing_area_widget, cairo_context)
         previous_matrix = cairo_context.matrix
         apply_transforms(cairo_context, target: :stroke)
         self.class.set_source_dynamically(cairo_context, stroke)
-        (SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
+        (SHAPE_GENERAL_PROPERTIES + SHAPE_STROKE_PROPERTIES).each do |property|
           apply_property(cairo_context, property)
         end
         cairo_context.stroke
