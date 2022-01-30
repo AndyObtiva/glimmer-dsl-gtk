@@ -103,8 +103,20 @@ module Glimmer
           accumulator
         end
         
-        def normalize_one_based_color(rgb)
+        def one_based_color_rgb(rgb)
+          return rgb if rgb.first.is_a?(Cairo::ImageSurface)
           rgb.each_with_index.map {|single_color, i| i == 3 ? single_color : single_color / 255.0}
+        end
+        
+        def set_source_dynamically(cairo_context, source_args)
+          source_args = one_based_color_rgb(source_args)
+          if source_args.first.is_a?(Cairo::ImageSurface)
+            cairo_context.set_source(*source_args)
+          elsif source_args.size == 3
+            cairo_context.set_source_rgb(*source_args)
+          elsif source_args.size == 4
+            cairo_context.set_source_rgba(*source_args)
+          end
         end
       end
       
@@ -173,43 +185,39 @@ module Glimmer
       end
       
       def draw_fill(drawing_area_widget, cairo_context)
-        @transforms.each do |transform|
-          cairo_context.send(transform.first, *transform.last)
-        end
-        the_fill = normalize_one_based_color(fill)
-        # TODO unite this code with stroke code and drawing area paint code
-        if the_fill.first.is_a?(Cairo::ImageSurface)
-          cairo_context.set_source(*the_fill)
-        elsif the_fill.size == 3
-          cairo_context.set_source_rgb(*the_fill)
-        elsif the_fill.size == 4
-          cairo_context.set_source_rgba(*the_fill)
-        end
+        previous_matrix = cairo_context.matrix
+        apply_transforms(cairo_context)
+        self.class.set_source_dynamically(cairo_context, fill)
         (SHAPE_FILL_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
           cairo_context.send("set_#{property}", send(property)) if send(property)
         end
         cairo_context.fill
-        cairo_context.identity_matrix
+        cairo_context.set_matrix(previous_matrix)
       end
       
       def draw_stroke(drawing_area_widget, cairo_context)
-        the_stroke = normalize_one_based_color(stroke)
-        if the_stroke.size == 3
-          cairo_context.set_source_rgb(*the_stroke)
-        elsif the_stroke.size == 4
-          cairo_context.set_source_rgba(*the_stroke)
-        end
+        previous_matrix = cairo_context.matrix
+        apply_transforms(cairo_context)
+        self.class.set_source_dynamically(cairo_context, stroke)
         (SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
           cairo_context.send("set_#{property}", send(property)) if send(property)
         end
         cairo_context.stroke
+        cairo_context.set_matrix(previous_matrix)
       end
       
       def draw_clip(drawing_area_widget, cairo_context)
+        previous_matrix = cairo_context.matrix
+        apply_transforms(cairo_context)
         SHAPE_GENERAL_PROPERTIES.each do |property|
           cairo_context.send("set_#{property}", send(property)) if send(property)
         end
         cairo_context.clip
+        cairo_context.set_matrix(previous_matrix)
+      end
+      
+      def apply_transforms(cairo_context)
+        @transforms.each { |transform| cairo_context.send(transform.first, *transform.last) }
       end
       
       def translate(x, y)
@@ -222,11 +230,6 @@ module Glimmer
       
       def rotate(angle)
         @transforms << [:rotate, [angle]]
-      end
-      
-      def normalize_one_based_color(rgb)
-        return rgb if rgb.first.is_a?(Cairo::ImageSurface)
-        self.class.normalize_one_based_color(rgb)
       end
       
       def respond_to?(method_name, include_private = false, &block)

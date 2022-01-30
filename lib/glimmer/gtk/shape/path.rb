@@ -70,10 +70,13 @@ module Glimmer
         end
         
         def draw_shape(drawing_area_widget, cairo_context)
+          previous_matrix = cairo_context.matrix
+          apply_transforms(cairo_context)
           cairo_context.new_path
           @drawing_operations.each do |drawing_operation_details|
             cairo_context.send(drawing_operation_details[0], *drawing_operation_details[1])
           end
+          cairo_context.set_matrix(previous_matrix)
         end
         
         def arc(*args)

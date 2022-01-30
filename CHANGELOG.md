@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.6
+
+- Support declarative `fill`/`paint` of `image, x, y` in cairo graphics
+- Support declarative transforms on cairo graphics shapes: `translate`, `scale`, `rotate`
+
 ## 0.0.5
 
 - Support `drawing_area#paint(red, green, blue)` operation to set the initial `drawing_area` paint color base
