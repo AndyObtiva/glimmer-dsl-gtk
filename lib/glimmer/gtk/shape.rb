@@ -125,8 +125,8 @@ module Glimmer
       prepend Transformable
       
       SHAPE_FILL_PROPERTIES = [:fill_rule]
-      SHAPE_STROKE_PROPERTIES = [:dash, :font_face, :font_matrix, :font_options, :font_size, :line_cap, :line_join, :line_width, :miter_limit, :scaled_font]
-      SHAPE_GENERAL_PROPERTIES = [:matrix, :operator, :tolerance]
+      SHAPE_STROKE_PROPERTIES = [:dash, :line_cap, :line_join, :line_width, :miter_limit, :scaled_font]
+      SHAPE_GENERAL_PROPERTIES = [:matrix, :operator, :tolerance, :font_face, :font_matrix, :font_options, :font_size]
       
       attr_reader :parent, :args, :keyword, :block
       attr_accessor :fill, :stroke, :clip
@@ -195,7 +195,7 @@ module Glimmer
         apply_transforms(cairo_context, target: :fill)
         self.class.set_source_dynamically(cairo_context, fill)
         (SHAPE_FILL_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
-          cairo_context.send("set_#{property}", *send(property)) if send(property)
+          apply_property(cairo_context, property)
         end
         cairo_context.fill
         cairo_context.set_matrix(previous_matrix)
@@ -206,7 +206,7 @@ module Glimmer
         apply_transforms(cairo_context, target: :stroke)
         self.class.set_source_dynamically(cairo_context, stroke)
         (SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
-          cairo_context.send("set_#{property}", *send(property)) if send(property)
+          apply_property(cairo_context, property)
         end
         cairo_context.stroke
         cairo_context.set_matrix(previous_matrix)
@@ -216,10 +216,20 @@ module Glimmer
         previous_matrix = cairo_context.matrix
         apply_transforms(cairo_context, target: :clip)
         SHAPE_GENERAL_PROPERTIES.each do |property|
-          cairo_context.send("set_#{property}", *send(property)) if send(property)
+          apply_property(cairo_context, property)
         end
         cairo_context.clip
         cairo_context.set_matrix(previous_matrix)
+      end
+      
+      def apply_property(cairo_context, property)
+        if send(property)
+          if property == :font_face
+            cairo_context.send("select_#{property}", *send(property))
+          else
+            cairo_context.send("set_#{property}", *send(property))
+          end
+        end
       end
       
       def respond_to?(method_name, include_private = false, &block)

@@ -109,6 +109,14 @@ module Glimmer
           @drawing_operations << [:rounded_rectangle, args]
         end
       
+        def text_path(*args)
+          @drawing_operations << [:text_path, args]
+        end
+      
+        def show_text(*args)
+          @drawing_operations << [:show_text, args]
+        end
+      
         def move_to(*args)
           @drawing_operations << [:move_to, args]
         end

@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.7
+
+- samples/cairo/text.rb
+- Support for `path` nested `show_text`, `text_path` operations
+
 ## 0.0.6
 
 - samples/cairo/clip_image.rb
@@ -18,6 +23,7 @@
 - Support declarative `fill`/`paint` of `image, x, y` in cairo graphics
 - Support declarative transforms on cairo graphics shapes: `translate`, `scale`, `rotate`
 - Support applying transform on `drawing_area` `paint`
+- Support for `path` nested `rectangle`, `rounded_rectangle`, and `arc_negative` operations
 
 ## 0.0.5
 
