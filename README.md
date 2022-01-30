@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.7
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.8
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -80,7 +80,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.7'
+gem 'glimmer-dsl-gtk', '~> 0.0.8'
 ```
 
 And, then run:
@@ -311,6 +311,11 @@ window {
 
 ```ruby
 require 'glimmer-dsl-gtk'
+require 'net/http'
+
+image_content = Net::HTTP.get(URI('https://raw.githubusercontent.com/AndyObtiva/glimmer-dsl-gtk/master/images/breaking-blue-wave.png'))
+image_file = File.join(Dir.home, 'breaking-blue-wave.png')
+File.write(image_file, image_content)
 
 include Glimmer
 
@@ -329,7 +334,7 @@ window {
       # Source image is from:
       # - https://www.publicdomainpictures.net/en/view-image.php?image=7683&picture=breaking-blue-wave
       # Converted to PNG before using it
-      image = Cairo::ImageSurface.from_png(File.expand_path(File.join('..', '..', 'images', 'breaking-blue-wave.png'), __dir__))
+      image = Cairo::ImageSurface.from_png(image_file)
       w = image.width
       h = image.height
   
@@ -574,6 +579,11 @@ window {
 
 ```ruby
 require 'glimmer-dsl-gtk'
+require 'net/http'
+
+image_content = Net::HTTP.get(URI('https://raw.githubusercontent.com/AndyObtiva/glimmer-dsl-gtk/master/images/breaking-blue-wave.png'))
+image_file = File.join(Dir.home, 'breaking-blue-wave.png')
+File.write(image_file, image_content)
 
 include Glimmer
 
@@ -584,7 +594,7 @@ window {
   drawing_area {
     paint 242.25, 242.25, 242.25
         
-    image = Cairo::ImageSurface.from_png(File.expand_path(File.join('..', '..', 'images', 'breaking-blue-wave.png'), __dir__))
+    image = Cairo::ImageSurface.from_png(image_file)
     w = image.width
     h = image.height
     
@@ -606,6 +616,11 @@ window {
 
 ```ruby
 require 'glimmer-dsl-gtk'
+require 'net/http'
+
+image_content = Net::HTTP.get(URI('https://raw.githubusercontent.com/AndyObtiva/glimmer-dsl-gtk/master/images/breaking-blue-wave.png'))
+image_file = File.join(Dir.home, 'breaking-blue-wave.png')
+File.write(image_file, image_content)
 
 include Glimmer
 
@@ -616,7 +631,7 @@ window {
   drawing_area {
     paint 242.25, 242.25, 242.25
     
-    image = Cairo::ImageSurface.from_png(File.expand_path(File.join('..', '..', 'images', 'breaking-blue-wave.png'), __dir__))
+    image = Cairo::ImageSurface.from_png(image_file)
     w = image.width
     h = image.height
     

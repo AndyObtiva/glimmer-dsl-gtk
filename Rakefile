@@ -21,7 +21,7 @@ Juwelier::Tasks.new do |gem|
   gem.email = "andy.am@gmail.com"
   gem.authors = ["Andy Maleh"]
   gem.executables = ['girb']
-  gem.files = ['README.md', 'CHANGELOG.md', 'VERSION', 'LICENSE.txt', 'glimmer-dsl-gtk.gemspec', 'bin/**/*', 'lib/**/*', 'icons/**/*', 'images/**/*', 'samples/**/*']
+  gem.files = ['README.md', 'CHANGELOG.md', 'VERSION', 'LICENSE.txt', 'glimmer-dsl-gtk.gemspec', 'bin/**/*', 'lib/**/*', 'icons/**/*', 'samples/**/*']
   gem.require_paths = ['lib', '.']
 
   # dependencies defined in Gemfile
