@@ -182,14 +182,17 @@ module Glimmer
       #
       # Subclasses can override
       def draw_shape(drawing_area_widget, cairo_context)
+        previous_matrix = cairo_context.matrix
+        apply_transforms(cairo_context, target: :shape)
         class_symbol = self.class.name.split('::').last
         keyword = self.class.keyword(class_symbol)
         cairo_context.send(keyword, *args)
+        cairo_context.set_matrix(previous_matrix)
       end
       
       def draw_fill(drawing_area_widget, cairo_context)
         previous_matrix = cairo_context.matrix
-        apply_transforms(cairo_context)
+        apply_transforms(cairo_context, target: :fill)
         self.class.set_source_dynamically(cairo_context, fill)
         (SHAPE_FILL_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
           cairo_context.send("set_#{property}", *send(property)) if send(property)
@@ -200,7 +203,7 @@ module Glimmer
       
       def draw_stroke(drawing_area_widget, cairo_context)
         previous_matrix = cairo_context.matrix
-        apply_transforms(cairo_context)
+        apply_transforms(cairo_context, target: :stroke)
         self.class.set_source_dynamically(cairo_context, stroke)
         (SHAPE_STROKE_PROPERTIES + SHAPE_GENERAL_PROPERTIES).each do |property|
           cairo_context.send("set_#{property}", *send(property)) if send(property)
@@ -211,7 +214,7 @@ module Glimmer
       
       def draw_clip(drawing_area_widget, cairo_context)
         previous_matrix = cairo_context.matrix
-        apply_transforms(cairo_context)
+        apply_transforms(cairo_context, target: :clip)
         SHAPE_GENERAL_PROPERTIES.each do |property|
           cairo_context.send("set_#{property}", *send(property)) if send(property)
         end

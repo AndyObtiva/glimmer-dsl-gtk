@@ -3,7 +3,7 @@ require 'glimmer-dsl-gtk'
 include Glimmer
 
 window {
-  title 'Clip'
+  title 'Clip Image'
   default_size 256, 256
   
   drawing_area {
@@ -21,7 +21,7 @@ window {
       w = image.width
       h = image.height
   
-      scale 256.0/w, 256.0/h
+      scale 256.0/w, 256.0/h, exclude: :shape # applies scale to fill source image only
       fill image, 0, 0
     }
   }

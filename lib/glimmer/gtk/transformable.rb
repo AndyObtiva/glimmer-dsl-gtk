@@ -66,20 +66,27 @@ module Glimmer
         super
       end
       
-      def apply_transforms(cairo_context)
-        @transforms.each { |transform| cairo_context.send(transform.first, *transform.last) }
+      # applies transform on target type (:shape, :drawing_area, :fill, :stroke, :clip)
+      def apply_transforms(cairo_context, target: )
+        @transforms.each do |transform|
+          operation = transform.first
+          args = transform.last.dup
+          options = args.pop
+          excluded_types = [options[:exclude]].flatten
+          cairo_context.send(operation, *args) if !excluded_types.include?(target)
+        end
       end
       
-      def translate(x, y)
-        @transforms << [:translate, [x, y]]
+      def translate(x, y, options = {})
+        @transforms << [:translate, [x, y, options]]
       end
       
-      def scale(x, y)
-        @transforms << [:scale, [x, y]]
+      def scale(x, y, options = {})
+        @transforms << [:scale, [x, y, options]]
       end
       
-      def rotate(angle)
-        @transforms << [:rotate, [angle]]
+      def rotate(angle, options = {})
+        @transforms << [:rotate, [angle, options]]
       end
     end
   end

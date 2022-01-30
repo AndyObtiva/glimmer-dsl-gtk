@@ -80,7 +80,7 @@ module Glimmer
           @gtk.signal_connect(:draw) do |drawing_area_widget, cairo_context|
             if @paint
               previous_matrix = cairo_context.matrix
-              apply_transforms(cairo_context)
+              apply_transforms(cairo_context, target: :drawing_area)
               Shape.set_source_dynamically(cairo_context, @paint)
               cairo_context.paint
               cairo_context.set_matrix(previous_matrix)
