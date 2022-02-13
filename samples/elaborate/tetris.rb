@@ -205,6 +205,7 @@ class Tetris
   def score_board
     box(:vertical) {
       label
+      label('Next')
       @preview_playfield_blocks = playfield(playfield_width: Model::Game::PREVIEW_PLAYFIELD_WIDTH, playfield_height: Model::Game::PREVIEW_PLAYFIELD_HEIGHT, block_size: BLOCK_SIZE)
       
       label

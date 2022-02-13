@@ -2,6 +2,7 @@
 
 ## 0.0.9
 
+- Add the text "Next" before the Next Tetromino Preview area
 - Fix Tetris Help menu (was called Options by mistake)
 
 ## 0.0.8
