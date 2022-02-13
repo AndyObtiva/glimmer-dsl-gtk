@@ -3,8 +3,9 @@
 ## 0.0.9
 
 - Add the text "Next" before the Next Tetromino Preview area
-- "Show Next Block Preview" menu item under "View" menu
+- Tetris "Show Next Block Preview" menu item under "View" menu
 - Fix Tetris Help menu (was called Options by mistake)
+- Fix issue with Tetris not accelerating upon level ups
 - Fix warning message: glimmer-dsl-gtk-0.0.8/lib/glimmer/gtk/widget_proxy.rb:192:in `new': 'Gtk::MessageDialog#initialize(parent, flags, type, buttons_type, message)' style has been deprecated. Use 'Gtk::MessageDialog#initialize(:parent => nil, :flags => 0, :type => :info, :buttons => :ok, :message => "")' style.
 
 ## 0.0.8

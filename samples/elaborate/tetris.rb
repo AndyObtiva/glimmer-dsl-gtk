@@ -304,10 +304,12 @@ class Tetris
   def start_moving_tetrominos_down
     unless @tetrominos_start_moving_down
       @tetrominos_start_moving_down = true
-      GLib::Timeout.add(@game.delay*1000) do
+      tetromino_move = proc do
         @game.down! if !@game.game_over? && !@game.paused?
-        true
+        GLib::Timeout.add(@game.delay*1000, &tetromino_move)
+        false # do not repeat
       end
+      GLib::Timeout.add(@game.delay*1000, &tetromino_move)
     end
   end
   

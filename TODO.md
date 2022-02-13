@@ -1,8 +1,7 @@
 # TODO
 
-- "Speed" menu
+- Tetris "Speed" menu
 - Fix issue with Tetris game restarting immediately on game over
-- Fix issue with examples/tetris.rb not accelerating upon level ups
 - Update Tetris screenshots
 
 - Support simpler syntax for wiring menu-bar menus and menu items
