@@ -94,17 +94,32 @@ class Tetris
     
     Model::Game::PREVIEW_PLAYFIELD_HEIGHT.times do |row|
       Model::Game::PREVIEW_PLAYFIELD_WIDTH.times do |column|
-        observe(@game.preview_playfield[row][column], :color) do |new_color|
-          color = new_color
+        preview_updater = proc do
           block = @preview_playfield_blocks[row][column]
-          block[:background_square].fill = color
-          block[:top_bevel_edge].fill = [color[0] + 4*BEVEL_CONSTANT, color[1] + 4*BEVEL_CONSTANT, color[2] + 4*BEVEL_CONSTANT]
-          block[:right_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
-          block[:bottom_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
-          block[:left_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
-          block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : color
+          if @game.show_preview_tetromino?
+            new_color = @game.preview_playfield[row][column].color
+            block[:background_square].fill = new_color
+            block[:top_bevel_edge].fill = [new_color[0] + 4*BEVEL_CONSTANT, new_color[1] + 4*BEVEL_CONSTANT, new_color[2] + 4*BEVEL_CONSTANT]
+            block[:right_bevel_edge].fill = [new_color[0] - BEVEL_CONSTANT, new_color[1] - BEVEL_CONSTANT, new_color[2] - BEVEL_CONSTANT]
+            block[:bottom_bevel_edge].fill = [new_color[0] - BEVEL_CONSTANT, new_color[1] - BEVEL_CONSTANT, new_color[2] - BEVEL_CONSTANT]
+            block[:left_bevel_edge].fill = [new_color[0] - BEVEL_CONSTANT, new_color[1] - BEVEL_CONSTANT, new_color[2] - BEVEL_CONSTANT]
+            block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : new_color
+            @next_label.text = 'Next'
+          else
+            transparent_color = [0, 0, 0, 0]
+            block[:background_square].fill = transparent_color
+            block[:top_bevel_edge].fill = transparent_color
+            block[:right_bevel_edge].fill = transparent_color
+            block[:bottom_bevel_edge].fill = transparent_color
+            block[:left_bevel_edge].fill = transparent_color
+            block[:border_square].stroke = transparent_color
+            @next_label.text = ''
+          end
           block[:drawing_area].queue_draw
         end
+      
+        observe(@game.preview_playfield[row][column], :color, &preview_updater)
+        observe(@game, :show_preview_tetromino, &preview_updater)
       end
     end
     
@@ -150,6 +165,16 @@ class Tetris
       
       menu_item(label: 'View') { |mi|
         m = menu {
+          check_menu_item('Show Next Block Preview') {
+            active @game.show_preview_tetromino?
+          
+            on(:activate) do
+              @game.show_preview_tetromino = !@game.show_preview_tetromino?
+            end
+          }
+          
+          separator_menu_item
+          
           menu_item(label: 'Show High Scores') {
             on(:activate) do
               show_high_score_dialog
@@ -205,7 +230,7 @@ class Tetris
   def score_board
     box(:vertical) {
       label
-      label('Next')
+      @next_label = label('Next')
       @preview_playfield_blocks = playfield(playfield_width: Model::Game::PREVIEW_PLAYFIELD_WIDTH, playfield_height: Model::Game::PREVIEW_PLAYFIELD_HEIGHT, block_size: BLOCK_SIZE)
       
       label
