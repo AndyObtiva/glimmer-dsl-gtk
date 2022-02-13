@@ -14,9 +14,9 @@ window { |w|
       end
     }
     
-    button('Button') {
+    button(label: 'Button') {
       on(:clicked) do
-        message_dialog(w) { |md|
+        message_dialog(parent: w) { |md|
           title 'You entered'
           text e.text
           

@@ -312,7 +312,7 @@ class Tetris
   end
   
   def show_game_over_dialog
-    message_dialog(@main_window) { |md|
+    message_dialog(parent: @main_window) { |md|
       title 'Game Over!'
       text "Score: #{@game.high_scores.first.score}\nLines: #{@game.high_scores.first.lines}\nLevel: #{@game.high_scores.first.level}"
       
@@ -337,7 +337,7 @@ class Tetris
       end.join("\n")
     end
     
-    message_dialog(@main_window) { |md|
+    message_dialog(parent: @main_window) { |md|
       title 'High Scores'
       text high_scores_string
       
@@ -350,7 +350,7 @@ class Tetris
   end
   
   def show_about_dialog
-    message_dialog(@main_window) { |md|
+    message_dialog(parent: @main_window) { |md|
       title 'About'
       text "Glimmer Tetris\n\nGlimmer DSL for GTK\n\nElaborate Sample\n\nCopyright (c) 2021-2022 Andy Maleh"
       

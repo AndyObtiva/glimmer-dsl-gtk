@@ -4,7 +4,7 @@ include Glimmer
 
 application('org.glimmer.hello-application') {
   on(:activate) do |app|
-    application_window(app) {
+    application_window(app) { |aw|
       title 'Widget Gallery'
       
       notebook { |n|
@@ -46,13 +46,24 @@ application('org.glimmer.hello-application') {
               spacing 10
               
               label('Button')
-              button('Push Me')
+              button(label: 'Push Me') {
+                on(:clicked) do
+                  message_dialog(parent: aw) { |md|
+                    title 'Information'
+                    text 'You clicked the button'
+                    
+                    on(:response) do
+                      md.destroy
+                    end
+                  }.show
+                end
+              }
               
               label('Radio Button')
               box(:horizontal) {
-                rb = radio_button('One')
-                radio_button(rb, 'Two')
-                radio_button(rb, 'Three')
+                rb = radio_button(label: 'One')
+                radio_button(label: 'Two', member: rb)
+                radio_button(label: 'Three', member: rb)
               }
               
               label('Check Button')
@@ -74,12 +85,12 @@ application('org.glimmer.hello-application') {
               spacing 10
               
               label('Horizontal Scale')
-              h_scale(1, 100, 1) {
+              scale(:horizontal, 1, 100, 1) {
                 visible true
               }
               
               label('Vertical Scale')
-              v_scale(1, 100, 1) {
+              scale(:vertical, 1, 100, 1) {
                 visible true
                 height_request 200
               }

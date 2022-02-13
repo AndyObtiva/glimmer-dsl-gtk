@@ -193,8 +193,20 @@ module Glimmer
       end
       
       def normalize_args(args)
-        args.map do |arg|
-          arg.is_a?(WidgetProxy) ? arg.gtk : arg
+        if args.size == 1 && args.first.is_a?(Hash)
+          hash_arg = args.first
+          hash_arg = Hash[hash_arg.map do |key, value|
+            normalized_value = value.respond_to?(:gtk) ? value.gtk : value
+            [key, normalized_value]
+          end]
+          args[0] = hash_arg
+          args
+        elsif args.is_a?(Array)
+          args.map do |arg|
+            arg.is_a?(WidgetProxy) ? arg.gtk : arg
+          end
+        else
+          args
         end
       end
     end

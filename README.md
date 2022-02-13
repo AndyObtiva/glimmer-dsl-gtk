@@ -35,7 +35,7 @@ NOTE: Glimmer DSL for GTK is currently in early alpha mode (incomplete proof-of-
 **[Glimmer](https://rubygems.org/gems/glimmer) DSL Comparison Table:**
 DSL | Platforms | Native? | Vector Graphics? | Pros | Cons | Prereqs
 ----|-----------|---------|------------------|------|------|--------
-[Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)](https://github.com/AndyObtiva/glimmer-dsl-swt) | Mac / Windows / Linux | Yes | Yes (Canvas Shape DSL) | Very Mature / Scaffolding / Native Executable Packaging / Custom Widgets | Slow JRuby Startup Time / Heavy Memory Footprint | Java / JRuby 
+[Glimmer DSL for SWT (JRuby Desktop Development GUI Framework)](https://github.com/AndyObtiva/glimmer-dsl-swt) | Mac / Windows / Linux | Yes | Yes (Canvas Shape DSL) | Very Mature / Scaffolding / Native Executable Packaging / Custom Widgets | Slow JRuby Startup Time / Heavy Memory Footprint | Java / JRuby
 [Glimmer DSL for Opal (Pure Ruby Web GUI and Auto-Webifier of Desktop Apps)](https://github.com/AndyObtiva/glimmer-dsl-opal) | All Web Browsers | No | Yes (Canvas Shape DSL) | Simpler than All JavaScript Technologies / Auto-Webify Desktop Apps | Setup Process / Only Rails 5 Support for Now | Rails
 [Glimmer DSL for LibUI (Prerequisite-Free Ruby Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-libui) | Mac / Windows / Linux | Yes | Yes (Area API) | Fast Startup Time / Light Memory Footprint | LibUI is an Incomplete Mid-Alpha Only | None Other Than MRI Ruby
 [Glimmer DSL for Tk (MRI Ruby Desktop Development GUI Library)](https://github.com/AndyObtiva/glimmer-dsl-tk) | Mac / Windows / Linux | Some Native-Themed Widgets (Not Truly Native) | Yes (Canvas) | Fast Startup Time / Light Memory Footprint | Widgets Do Not Look Truly Native, Espcially on Linux | ActiveTcl / MRI Ruby
@@ -1022,9 +1022,9 @@ include Glimmer
 window { |w|
   title 'Hello, Button!'
   
-  button('Button') {
+  button(label: 'Button') {
     on(:clicked) do
-      message_dialog(w) { |md|
+      message_dialog(parent: w) { |md|
         title 'Information'
         text 'You clicked the button'
         
@@ -1076,9 +1076,9 @@ window { |w|
       end
     }
     
-    button('Button') {
+    button(label: 'Button') {
       on(:clicked) do
-        message_dialog(w) { |md|
+        message_dialog(parent: w) { |md|
           title 'You entered'
           text e.text
           
@@ -1400,7 +1400,7 @@ include Glimmer
 
 application('org.glimmer.hello-application') {
   on(:activate) do |app|
-    application_window(app) {
+    application_window(app) { |aw|
       title 'Widget Gallery'
       
       notebook { |n|
@@ -1442,13 +1442,24 @@ application('org.glimmer.hello-application') {
               spacing 10
               
               label('Button')
-              button('Push Me')
+              button(label: 'Push Me') {
+                on(:clicked) do
+                  message_dialog(parent: aw) { |md|
+                    title 'Information'
+                    text 'You clicked the button'
+                    
+                    on(:response) do
+                      md.destroy
+                    end
+                  }.show
+                end
+              }
               
               label('Radio Button')
               box(:horizontal) {
-                rb = radio_button('One')
-                radio_button(rb, 'Two')
-                radio_button(rb, 'Three')
+                rb = radio_button(label: 'One')
+                radio_button(label: 'Two', member: rb)
+                radio_button(label: 'Three', member: rb)
               }
               
               label('Check Button')
@@ -1470,12 +1481,12 @@ application('org.glimmer.hello-application') {
               spacing 10
               
               label('Horizontal Scale')
-              h_scale(1, 100, 1) {
+              scale(:horizontal, 1, 100, 1) {
                 visible true
               }
               
               label('Vertical Scale')
-              v_scale(1, 100, 1) {
+              scale(:vertical, 1, 100, 1) {
                 visible true
                 height_request 200
               }
@@ -1848,7 +1859,7 @@ class Tetris
   end
   
   def show_game_over_dialog
-    message_dialog(@main_window) { |md|
+    message_dialog(parent: @main_window) { |md|
       title 'Game Over!'
       text "Score: #{@game.high_scores.first.score}\nLines: #{@game.high_scores.first.lines}\nLevel: #{@game.high_scores.first.level}"
       
@@ -1873,7 +1884,7 @@ class Tetris
       end.join("\n")
     end
     
-    message_dialog(@main_window) { |md|
+    message_dialog(parent: @main_window) { |md|
       title 'High Scores'
       text high_scores_string
       
@@ -1886,7 +1897,7 @@ class Tetris
   end
   
   def show_about_dialog
-    message_dialog(@main_window) { |md|
+    message_dialog(parent: @main_window) { |md|
       title 'About'
       text "Glimmer Tetris\n\nGlimmer DSL for GTK\n\nElaborate Sample\n\nCopyright (c) 2021-2022 Andy Maleh"
       
