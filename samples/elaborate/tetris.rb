@@ -314,21 +314,19 @@ class Tetris
   end
   
   def show_game_over_dialog
+    @game.paused = true
     message_dialog(parent: @main_window) { |md|
       title 'Game Over!'
       text "Score: #{@game.high_scores.first.score}\nLines: #{@game.high_scores.first.lines}\nLevel: #{@game.high_scores.first.level}"
       
       on(:response) do
+        @game.restart!
         md.destroy
       end
     }.show
-    
-    @game.restart!
-    false
   end
   
   def show_high_score_dialog
-    game_paused = !!@game.paused
     @game.paused = true
     
     if @game.high_scores.empty?
@@ -344,11 +342,10 @@ class Tetris
       text high_scores_string
       
       on(:response) do
+        @game.paused = false
         md.destroy
       end
     }.show
-    
-    @game.paused = game_paused
   end
   
   def show_about_dialog

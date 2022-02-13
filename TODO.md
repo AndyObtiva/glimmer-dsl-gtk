@@ -1,7 +1,6 @@
 # TODO
 
 - Tetris "Speed" menu
-- Fix issue with Tetris game restarting immediately on game over
 - Update Tetris screenshots
 
 - Support simpler syntax for wiring menu-bar menus and menu items
