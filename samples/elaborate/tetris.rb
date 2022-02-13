@@ -190,6 +190,27 @@ class Tetris
         mi.submenu = m.gtk
       }
       
+      menu_item(label: 'Speed') { |mi|
+        m = menu {
+          rmi = radio_menu_item(nil, Model::Game::SPEEDS.first.to_s.capitalize) {
+            active true
+            
+            on(:activate) do
+              @game.send("speed_#{Model::Game::SPEEDS.first}=", true)
+            end
+          }
+          
+          Model::Game::SPEEDS.drop(1).each do |speed|
+            radio_menu_item(rmi.group, speed.to_s.capitalize) {
+              on(:activate) do
+                @game.send("speed_#{speed}=", true)
+              end
+            }
+          end
+        }
+        mi.submenu = m.gtk
+      }
+      
       menu_item(label: 'Options') { |mi|
         m = menu {
           rmi = radio_menu_item(nil, 'Instant Down on Up') {

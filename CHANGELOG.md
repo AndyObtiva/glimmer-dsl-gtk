@@ -4,6 +4,7 @@
 
 - Add the text "Next" before the Next Tetromino Preview area
 - Tetris "Show Next Block Preview" menu item under "View" menu
+- Tetris "Speed" menu
 - Fix Tetris Help menu (was called Options by mistake)
 - Fix issue with Tetris game restarting immediately on game over
 - Fix issue with Tetris not accelerating upon level ups

@@ -1,6 +1,5 @@
 # TODO
 
-- Tetris "Speed" menu
 - Update Tetris screenshots
 
 - Support simpler syntax for wiring menu-bar menus and menu items
