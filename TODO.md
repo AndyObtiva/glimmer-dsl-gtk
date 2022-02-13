@@ -10,3 +10,4 @@
 - Set fill rule, line cap with ruby symbols
 - Take cairo sample screenshots in Linux
 - Take cairo sample screenshots in Windows
+- Improve spacing and consider using fonts in Tetris score lane

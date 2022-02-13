@@ -1,4 +1,4 @@
-# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.8
+# [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=85 />](https://github.com/AndyObtiva/glimmer) Glimmer DSL for GTK 0.0.9
 ## Ruby-GNOME Desktop Development GUI Library
 [![Gem Version](https://badge.fury.io/rb/glimmer-dsl-gtk.svg)](http://badge.fury.io/rb/glimmer-dsl-gtk)
 [![Join the chat at https://gitter.im/AndyObtiva/glimmer](https://badges.gitter.im/AndyObtiva/glimmer.svg)](https://gitter.im/AndyObtiva/glimmer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -86,7 +86,7 @@ gem install glimmer-dsl-gtk
 
 Add the following to `Gemfile`:
 ```
-gem 'glimmer-dsl-gtk', '~> 0.0.8'
+gem 'glimmer-dsl-gtk', '~> 0.0.9'
 ```
 
 And, then run:
@@ -1667,17 +1667,32 @@ class Tetris
     
     Model::Game::PREVIEW_PLAYFIELD_HEIGHT.times do |row|
       Model::Game::PREVIEW_PLAYFIELD_WIDTH.times do |column|
-        observe(@game.preview_playfield[row][column], :color) do |new_color|
-          color = new_color
+        preview_updater = proc do
           block = @preview_playfield_blocks[row][column]
-          block[:background_square].fill = color
-          block[:top_bevel_edge].fill = [color[0] + 4*BEVEL_CONSTANT, color[1] + 4*BEVEL_CONSTANT, color[2] + 4*BEVEL_CONSTANT]
-          block[:right_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
-          block[:bottom_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
-          block[:left_bevel_edge].fill = [color[0] - BEVEL_CONSTANT, color[1] - BEVEL_CONSTANT, color[2] - BEVEL_CONSTANT]
-          block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : color
+          if @game.show_preview_tetromino?
+            new_color = @game.preview_playfield[row][column].color
+            block[:background_square].fill = new_color
+            block[:top_bevel_edge].fill = [new_color[0] + 4*BEVEL_CONSTANT, new_color[1] + 4*BEVEL_CONSTANT, new_color[2] + 4*BEVEL_CONSTANT]
+            block[:right_bevel_edge].fill = [new_color[0] - BEVEL_CONSTANT, new_color[1] - BEVEL_CONSTANT, new_color[2] - BEVEL_CONSTANT]
+            block[:bottom_bevel_edge].fill = [new_color[0] - BEVEL_CONSTANT, new_color[1] - BEVEL_CONSTANT, new_color[2] - BEVEL_CONSTANT]
+            block[:left_bevel_edge].fill = [new_color[0] - BEVEL_CONSTANT, new_color[1] - BEVEL_CONSTANT, new_color[2] - BEVEL_CONSTANT]
+            block[:border_square].stroke = new_color == Model::Block::COLOR_CLEAR ? COLOR_GRAY : new_color
+            @next_label.text = 'Next'
+          else
+            transparent_color = [0, 0, 0, 0]
+            block[:background_square].fill = transparent_color
+            block[:top_bevel_edge].fill = transparent_color
+            block[:right_bevel_edge].fill = transparent_color
+            block[:bottom_bevel_edge].fill = transparent_color
+            block[:left_bevel_edge].fill = transparent_color
+            block[:border_square].stroke = transparent_color
+            @next_label.text = ''
+          end
           block[:drawing_area].queue_draw
         end
+      
+        observe(@game.preview_playfield[row][column], :color, &preview_updater)
+        observe(@game, :show_preview_tetromino, &preview_updater)
       end
     end
     
@@ -1723,6 +1738,16 @@ class Tetris
       
       menu_item(label: 'View') { |mi|
         m = menu {
+          check_menu_item(label: 'Show Next Block Preview') {
+            active @game.show_preview_tetromino?
+          
+            on(:activate) do
+              @game.show_preview_tetromino = !@game.show_preview_tetromino?
+            end
+          }
+          
+          separator_menu_item
+          
           menu_item(label: 'Show High Scores') {
             on(:activate) do
               show_high_score_dialog
@@ -1734,6 +1759,27 @@ class Tetris
               @game.clear_high_scores!
             end
           }
+        }
+        mi.submenu = m.gtk
+      }
+      
+      menu_item(label: 'Speed') { |mi|
+        m = menu {
+          rmi = radio_menu_item(nil, Model::Game::SPEEDS.first.to_s.capitalize) {
+            active true
+            
+            on(:activate) do
+              @game.send("speed_#{Model::Game::SPEEDS.first}=", true)
+            end
+          }
+          
+          Model::Game::SPEEDS.drop(1).each do |speed|
+            radio_menu_item(rmi.group, speed.to_s.capitalize) {
+              on(:activate) do
+                @game.send("speed_#{speed}=", true)
+              end
+            }
+          end
         }
         mi.submenu = m.gtk
       }
@@ -1778,6 +1824,7 @@ class Tetris
   def score_board
     box(:vertical) {
       label
+      @next_label = label('Next')
       @preview_playfield_blocks = playfield(playfield_width: Model::Game::PREVIEW_PLAYFIELD_WIDTH, playfield_height: Model::Game::PREVIEW_PLAYFIELD_HEIGHT, block_size: BLOCK_SIZE)
       
       label
@@ -1851,29 +1898,29 @@ class Tetris
   def start_moving_tetrominos_down
     unless @tetrominos_start_moving_down
       @tetrominos_start_moving_down = true
-      GLib::Timeout.add(@game.delay*1000) do
+      tetromino_move = proc do
         @game.down! if !@game.game_over? && !@game.paused?
-        true
+        GLib::Timeout.add(@game.delay*1000, &tetromino_move)
+        false # do not repeat
       end
+      GLib::Timeout.add(@game.delay*1000, &tetromino_move)
     end
   end
   
   def show_game_over_dialog
+    @game.paused = true
     message_dialog(parent: @main_window) { |md|
       title 'Game Over!'
       text "Score: #{@game.high_scores.first.score}\nLines: #{@game.high_scores.first.lines}\nLevel: #{@game.high_scores.first.level}"
       
       on(:response) do
+        @game.restart!
         md.destroy
       end
     }.show
-    
-    @game.restart!
-    false
   end
   
   def show_high_score_dialog
-    game_paused = !!@game.paused
     @game.paused = true
     
     if @game.high_scores.empty?
@@ -1889,11 +1936,10 @@ class Tetris
       text high_scores_string
       
       on(:response) do
+        @game.paused = false
         md.destroy
       end
     }.show
-    
-    @game.paused = game_paused
   end
   
   def show_about_dialog

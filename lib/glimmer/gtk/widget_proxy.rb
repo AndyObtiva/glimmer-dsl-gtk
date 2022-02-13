@@ -147,7 +147,7 @@ module Glimmer
       
       # Subclasses may override to perform post initialization work on an added child (normally must also call super)
       def post_initialize_child(child)
-        @gtk.add(child.gtk) if @gtk.respond_to?(:add)
+        @gtk.add(child.gtk) if @gtk.respond_to?(:add) # && child.keyword != 'menu' # TODO consider moving this code to a MenuProxy
         child.gtk&.show if child.gtk&.respond_to?(:show)
       end
       

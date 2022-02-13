@@ -165,7 +165,7 @@ class Tetris
       
       menu_item(label: 'View') { |mi|
         m = menu {
-          check_menu_item('Show Next Block Preview') {
+          check_menu_item(label: 'Show Next Block Preview') {
             active @game.show_preview_tetromino?
           
             on(:activate) do

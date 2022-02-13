@@ -9,6 +9,7 @@
 - Fix issue with Tetris game restarting immediately on game over
 - Fix issue with Tetris not accelerating upon level ups
 - Fix warning message: glimmer-dsl-gtk-0.0.8/lib/glimmer/gtk/widget_proxy.rb:192:in `new': 'Gtk::MessageDialog#initialize(parent, flags, type, buttons_type, message)' style has been deprecated. Use 'Gtk::MessageDialog#initialize(:parent => nil, :flags => 0, :type => :info, :buttons => :ok, :message => "")' style.
+- Fix warning message: Attempting to add a widget with type GtkMenu to a container of type GtkMenuItem, but the widget is already inside a container of type GtkWindow, please remove the widget from its existing container first.
 
 ## 0.0.8
 
