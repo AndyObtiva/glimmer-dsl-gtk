@@ -71,7 +71,7 @@ On the Mac, make sure to:
 
 ### Windows
 
-Make sure to install [Ruby+Devkit](https://rubyinstaller.org/downloads/) with MSYS2 and MINGW development toolchain from [RubyInstaller](https://rubyinstaller.org/). When prompted to run `ridk install` at the end, go ahead with it, and then make sure to run all 3 commands in order: 
+Make sure to install [Ruby+Devkit](https://rubyinstaller.org/downloads/) from [RubyInstaller](https://rubyinstaller.org/). When prompted to run `ridk install` at the end, go ahead with it, and then make sure to run all 3 commands in order: 
 1. MSYS2 base installation
 2. MSYS2 system update
 3. MSYS2 and MINGW development toolchain  
