@@ -1,7 +1,7 @@
 # TODO
 
 - Update Tetris screenshots
-
+- Support `gtk4` Ruby gem now that it is fully supported in release 4.0.0
 - Support simpler syntax for wiring menu-bar menus and menu items
 - Do not set a default height for window (only default width)
 - Support simpler usage of `box` `pack_start` and `pack_end`
